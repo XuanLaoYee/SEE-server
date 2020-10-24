@@ -15,8 +15,18 @@ let app = new Koa();
 // app.use(enforceHttps());
 //强制转换为https协议
 //允许跨域
+const corsOptions = {
+    //To allow requests from client
+    origin: [
+        "http://localhost:9527",
+    ],
+    credentials: true, //是否允许发送Cookie
+    // allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法
+    // allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
+    // exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] //设置获取其他自定义字段
+};
 const cors = require('koa2-cors');
-app.use(cors());
+app.use(cors(corsOptions));
 
 // 处理异常
 const error = require('./app/middleware/error');
