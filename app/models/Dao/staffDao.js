@@ -99,6 +99,42 @@ module.exports = {
     checkProjectProgress: async (project)=>{
         const sql = 'select * from task where project = ?'
         return await db.query(sql,project);
+    },
+    checkMyTaskInProject : async (project,account) =>{
+        const sql = 'select * from task where project = ?'
+        const tasks = await db.query(sql,project);
+        var ids = []
+        for(var i=0;i<tasks.length;i++){
+            const sql1 = 'select * from perform where id = ? and account = ?';
+            const theTask = await db.query(sql1,[tasks[i].id,account])
+            if(theTask.length!==0){
+                ids.push(theTask[0].id)
+            }
+        }
+        return ids
+    },
+    checkTheTask:async (id)=>{
+        const sql = 'select * from task where id = ?'
+        return await db.query(sql,id)
+    },
+    isCanDoThisTask:async (id,account)=>{
+        const sql = 'select * from perform where id = ? and account = ?';
+        const theTask = await db.query(sql,[id,account])
+        if(theTask.length !== 0){
+            const sql1 = 'select * from task where id = ? and done = 0';
+            const theTask1 = await db.query(sql1,id);
+            if(theTask1.length!==0){
+                if(theTask1[0].orderid===1){
+                    return true;
+                }else {
+                    const sql2 = 'select * from task where id = ? and done = 1 and orderid = ?';
+                    const theTask2 = await db.query(sql1,[id,theTask1[0].orderid-1]);
+                    if(theTask2.length!==0){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
-
 }

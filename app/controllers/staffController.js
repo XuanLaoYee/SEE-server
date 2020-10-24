@@ -30,7 +30,7 @@ module.exports = {
                 ctx.body = {
                     code:'001',
                     account:account,
-                    userKind:'staff',
+                    userKind:'admin',
                     msg:'登录成功'
                 };
             }else{
@@ -89,16 +89,24 @@ module.exports = {
             }
             return
         }
-        const projects = await staffDao.checkProjectProgress(project)
+        const projects = await staffDao.checkMyTaskInProject(project,account);
         var tasks = []
         var dones = []
+        var canDos = []
         for(var i=0;i<projects.length;i++){
             tasks.push(projects[i].id)
-            dones.push(projects[i].done)
+            const theTask = await checkTheTask(projects[i].id)
+            dones.push(theTask[0].done)
+            if(await staffDao.isCanDoThisTask(projects[i].id,account)){
+                canDos.push(1)
+            }else{
+                canDos.push(0)
+            }
         }
         ctx.body = {
             code:'001',
             tasks,
+            canDos,
             dones
         }
     },

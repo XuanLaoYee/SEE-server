@@ -4,7 +4,7 @@ const messageController = require('../../controllers/messageController');
 let messageRouter = new Router();
 
 messageRouter
-    .post('api/message',messageController.getMessage)
+    .post('/api/message',messageController.getMessage)
 
 
 
