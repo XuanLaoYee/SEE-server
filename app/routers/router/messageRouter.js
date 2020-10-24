@@ -5,3 +5,7 @@ let messageRouter = new Router();
 
 messageRouter
     .post('api/message',messageController.getMessage)
+
+
+
+module.exports = messageRouter;

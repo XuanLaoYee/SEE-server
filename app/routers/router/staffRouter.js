@@ -14,3 +14,4 @@ staffRouter
     .post('api/staff/recycleTask',staffController.recycleTask)
     .post('api/staff/checkSameStaff',staffController.checkSameStaff)
 
+module.exports = staffRouter;
