@@ -57,14 +57,14 @@ app.use(logger);
 
 
 var options = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./key-cert.pem')
+    key: fs.readFileSync('./4670790_localhost.mofon.top.key'),
+    cert: fs.readFileSync('./4670790_localhost.mofon.top.pem')
 };
 
-http.createServer(app.callback()).listen(Port,()=>{
-    console.log(`http服务器在${ Port }端口启动`)
+https.createServer(options,app.callback()).listen(Port,()=>{
+    console.log(`https服务器在${ Port }端口启动`)
 });
-// http.createServer(options,app.callback()).listen(Port+1,() =>{
+// https.createServer(options,app.callback()).listen(Port+1,() =>{
 //     console.log(`https服务器在${ Port+1 }端口启动`)
 // });
 

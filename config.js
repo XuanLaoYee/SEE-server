@@ -5,7 +5,7 @@ module.exports = {
     staticDir: path.resolve('./public'),
     dbConfig: {
         connectionLimit: 10,
-        host: 'localhost',
+        host: 'localhost.mofon.top',
         user: 'root',
         password: 'Xuan123#',
         database: 'company'
