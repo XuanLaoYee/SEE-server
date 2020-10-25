@@ -1,17 +1,18 @@
 const adminDao = require("../models/Dao/adminDao")
 const ItemDao = require("../models/Dao/ItemsDao")
+const userDao = require("../models/Dao/userDao")
 
 module.exports = {
     startProject: async ctx => {
         let {nums,projectName} = ctx.request.body;
-        let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
-            ctx.body = {
-                code: '403',
-                msg: '您无权操作'
-            }
-            return
-        }
+        // let userKind = ctx.session.user.userKind
+        // if (userKind !== "admin") {
+        //     ctx.body = {
+        //         code: '403',
+        //         msg: '您无权操作'
+        //     }
+        //     return
+        // }
         projectId = await adminDao.startNewProject(nums)
         ctx.body = {
             code: '001',

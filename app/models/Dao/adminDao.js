@@ -92,7 +92,7 @@ module.exports = {
         }
     },
     startNewProject: async (subNums,projectName) => {
-        const sql = 'select *from task order by project desc'
+        const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
         var projectId = 0
         if (tasks.size === 0) {
@@ -102,7 +102,7 @@ module.exports = {
         }
         for (var i = 0; i < subNums; i++) {
             var sorts = ['A', 'B', 'C']
-            var cur = Math.ceil(Math.random() * 3);
+            var cur = Math.ceil(Math.random() * 3-1);
             const sql1 = 'insert into task values (null ,?,?,?,0)';
             await db.query(sql1, [sorts[cur], i + 1, projectId]);
         }
@@ -118,19 +118,19 @@ module.exports = {
         for (var i = 0; i < projects.size; i++) {
             var accountTemp = ""
             if (projects[i].sort === "A") {
-                var cur = Math.ceil(Math.random() * groupA.size)
+                var cur = Math.ceil(Math.random() * groupA.size-1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
                 accountTemp = groupA[cur].account;
                 await db.query(sql6, [groupA[cur].account, projects[i].id, groupA[cur].account]);
                 await db.query(msg,[groupA[cur].account])
             } else if (projects[i].sort === "B") {
-                var cur = Math.ceil(Math.random() * groupB.size)
+                var cur = Math.ceil(Math.random() * groupB.size-1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
                 accountTemp = groupA[cur].account;
                 await db.query(sql6, [groupB[cur].account, projects[i].id, groupB[cur].account]);
                 await db.query(msg,[groupB[cur].account])
             } else if (projects[i].sort === "C") {
-                var cur = Math.ceil(Math.random() * groupC.size)
+                var cur = Math.ceil(Math.random() * groupC.size-1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
                 accountTemp = groupA[cur].account;
                 await db.query(sql6, [groupC[cur].account, projects[i].id, groupC[cur].account]);
