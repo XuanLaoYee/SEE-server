@@ -114,25 +114,25 @@ module.exports = {
         const groupC = await db.query(sql4)
         const sql5 = 'select * from task where project = ?'
         const projects = await db.query(sql5, projectId);
-        const msg = 'insert into messagebox values ("管理员重启了新的项目，请查看任务",?,null,0)'
-        for (var i = 0; i < projects.size; i++) {
+        const msg = 'insert into messagebox values ("管理员开启了新的项目，请查看任务",?,null,0)'
+        for (var i = 0; i < projects.length; i++) {
             var accountTemp = ""
-            if (projects[i].sort === "A") {
-                var cur = Math.ceil(Math.random() * groupA.size-1)
+            if (projects[i].sort === 'A') {
+                var cur = Math.ceil(Math.random() * groupA.length -1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
                 accountTemp = groupA[cur].account;
                 await db.query(sql6, [groupA[cur].account, projects[i].id, groupA[cur].account]);
                 await db.query(msg,[groupA[cur].account])
-            } else if (projects[i].sort === "B") {
-                var cur = Math.ceil(Math.random() * groupB.size-1)
+            } else if (projects[i].sort === 'B') {
+                var cur = Math.ceil(Math.random() * groupB.length -1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
-                accountTemp = groupA[cur].account;
+                accountTemp = groupB[cur].account;
                 await db.query(sql6, [groupB[cur].account, projects[i].id, groupB[cur].account]);
                 await db.query(msg,[groupB[cur].account])
-            } else if (projects[i].sort === "C") {
-                var cur = Math.ceil(Math.random() * groupC.size-1)
+            } else if (projects[i].sort === 'C') {
+                var cur = Math.ceil(Math.random() * groupC.length -1)
                 const sql6 = 'insert into perform values (?,?,?,null,0)';
-                accountTemp = groupA[cur].account;
+                accountTemp = groupC[cur].account;
                 await db.query(sql6, [groupC[cur].account, projects[i].id, groupC[cur].account]);
                 await db.query(msg,[groupC[cur].account])
             }

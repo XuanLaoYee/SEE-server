@@ -38,19 +38,19 @@ app.use(rewriteUrl);
 // 使用koa-static处理静态资源
 app.use(KoaStatic(staticDir));
 
-// // session
-// const CONFIG = require('./app/middleware/session');
-// app.keys = ['session app keys'];
-// app.use(Session(CONFIG, app));
-//
-// // 判断是否登录
-// const isLogin = require('./app/middleware/isLogin');
-// app.use(isLogin);
-//
-// app.use(async (ctx, next) => {
-//     ctx.state.user = ctx.session.user;
-//     await next();
-// });
+// session
+const CONFIG = require('./app/middleware/session');
+app.keys = ['session app keys'];
+app.use(Session(CONFIG, app));
+
+// 判断是否登录
+const isLogin = require('./app/middleware/isLogin');
+app.use(isLogin);
+
+app.use(async (ctx, next) => {
+    ctx.state.user = ctx.session.user;
+    await next();
+});
 
 // 处理请求体数据
 const koaBodyConfig = require('./app/middleware/koaBodyConfig');

@@ -16,6 +16,7 @@ module.exports = {
             ctx.body = {
                 code:'001',
                 account:account,
+                userName:user[0].userName,
                 userKind:'staff',
                 msg:'登录成功'
             };
@@ -30,6 +31,7 @@ module.exports = {
                 ctx.body = {
                     code:'001',
                     account:account,
+                    userName:user[0].userName,
                     userKind:'admin',
                     msg:'登录成功'
                 };
@@ -159,25 +161,30 @@ module.exports = {
         let account = ctx.session.user.account;
         const sort = await userDao.checkMySort(account)
         var accounts = []
+        var userNames = []
         if(sort === "A"){
             const users = await userDao.checkStaffA();
             for(var i = 0;i<users.length;i++){
                 accounts.push(users[i].account)
+                userNames.push(users[i].userName)
             }
         }else if(sort === "B"){
             const users = await userDao.checkStaffB();
             for(var i = 0;i<users.length;i++){
                 accounts.push(users[i].account)
+                userNames.push(users[i].userName)
             }
         }else if(sort === "C"){
             const users = await userDao.checkStaffC();
             for(var i = 0;i<users.length;i++){
                 accounts.push(users[i].account)
+                userNames.push(users[i].userName)
             }
         }
         ctx.body = {
             code:'001',
-            accounts
+            accounts,
+            userNames
         }
     },
 

@@ -5,15 +5,15 @@ const userDao = require("../models/Dao/userDao")
 module.exports = {
     startProject: async ctx => {
         let {nums,projectName} = ctx.request.body;
-        // let userKind = ctx.session.user.userKind
-        // if (userKind !== "admin") {
-        //     ctx.body = {
-        //         code: '403',
-        //         msg: '您无权操作'
-        //     }
-        //     return
-        // }
-        projectId = await adminDao.startNewProject(nums)
+        let userKind = ctx.session.user.userKind
+        if (userKind !== "admin") {
+            ctx.body = {
+                code: '403',
+                msg: '您无权操作'
+            }
+            return
+        }
+        projectId = await adminDao.startNewProject(nums,projectName)
         ctx.body = {
             code: '001',
             projectId,
@@ -167,48 +167,60 @@ module.exports = {
     },
     checkStaffA:async ctx=>{
         var accounts = []
+        var userNames = []
         const users = await userDao.checkStaffA();
         for(var i = 0;i<users.length;i++){
             accounts.push(users[i].account)
+            userNames.push(users[i].userName)
         }
         ctx.body = {
             code:'001',
-            accounts
+            accounts,
+            userNames
         }
     },
     checkStaffB:async ctx=>{
         var accounts = []
+        var userNames = []
         const users = await userDao.checkStaffB();
         for(var i = 0;i<users.length;i++){
             accounts.push(users[i].account)
+            userNames.push(users[i].userName)
         }
         ctx.body = {
             code:'001',
-            accounts
+            accounts,
+            userNames
         }
     },
     checkStaffC:async ctx=>{
         var accounts = []
+        var userNames = []
         const users = await userDao.checkStaffC();
         for(var i = 0;i<users.length;i++){
             accounts.push(users[i].account)
+            userNames.push(users[i].userName)
         }
         ctx.body = {
             code:'001',
-            accounts
+            accounts,
+            userNames
         }
     },
     checkAllStaff:async ctx=>{
         const users = await userDao.checkAllStaff();
         var accounts = []
         var sorts = []
+        var userNames = []
         for(var i = 0;i<users.length;i++){
             accounts.push(users[i].account)
             sorts.push(users[i].sort)
+            userNames.push(users[i].userName)
         }
         ctx.body = {
             code:'001',
             accounts,
+            userNames,
             sorts
         }
     },
