@@ -9,6 +9,34 @@ function isInArray(arr, value) {
     return false;
 }
 
+function max(a,b){
+    if(a>b){
+        return a;
+    }
+    return b;
+}
+
+function min(a,b){
+    if(a<b){
+        return a;
+    }
+    return b;
+}
+
+
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!')
+        return
+    }
+    var array =[];
+    for(var i = 0; i < arr.length; i++) {
+        if( !array.includes( arr[i]) ) {//includes 检测数组是否有某个值
+            array.push(arr[i]);
+        }
+    }
+    return array
+}
 module.exports = {
     Login: async (account, password) => {
         const sql = 'select * from admin where account = ? and password = ?';
@@ -77,7 +105,7 @@ module.exports = {
         }
     },
     terminationProject: async (project) => {
-        const sql1 = 'select * from participate where project = ?'
+        const sql1 = 'select * from participate where project = ? and done = 0'
         const tasks = await db.query(sql1,project)
         var staffs = []
         for (var i = 0; i < tasks.length; i++) {
@@ -87,9 +115,13 @@ module.exports = {
         }
         await db.query(sql, project)
         for(var i= 0 ;i<staffs.length;i++){
-            const msg = 'insert into msg values ("管理员已终结"+?+"号项目",?,null,1)';
+            const msg = 'insert into msg values ("管理员已暂停"+?+"号项目",?,null,1)';
             await db.query(msg,[project,staffs[i]])
         }
+        const sql2 = 'update participate set done = 2 where project = ?';
+        await db.query(sql2,[project])
+        const sql3 = 'update task set done = 2 where project = ? and done = 0';
+        await db.query(sql3,[project])
     },
     startNewProject: async (subNums,projectName) => {
         const sql = 'select * from task order by project desc'
@@ -103,8 +135,8 @@ module.exports = {
         for (var i = 0; i < subNums; i++) {
             var sorts = ['A', 'B', 'C']
             var cur = Math.ceil(Math.random() * 3-1);
-            const sql1 = 'insert into task values (null ,?,?,?,0)';
-            await db.query(sql1, [sorts[cur], i + 1, projectId]);
+            const sql1 = 'insert into task values (null ,?,?,0)';
+            await db.query(sql1, [sorts[cur],projectId]);
         }
         const sql2 = 'select *from staff where sort = "A"';
         const sql3 = 'select *from staff where sort = "B"';
@@ -145,12 +177,33 @@ module.exports = {
         }
         const sql10 = 'insert into projectName values (?,?)'
         await db.query(sql10,[projectName,projectId])
+        let already = [];
+        let old = [];
+        for(var i=0;i<subNums;i++){
+            old.push(projects[i].id)
+        }
+        while(old.length>0){
+            if(already.length === 0){
+                let cur = Math.ceil(Math.random() * old.length -1)
+                already.push(old.push(old[cur]))
+                old.slice(cur,1)
+            }else{
+                var cur1 = Math.ceil(Math.random() * old.length -1)
+                var cur2 = Math.ceil(Math.random() * already.length - 1);
+                var maxId = max(old[cur1],already[cur2]);
+                var minId = min(old[cur1],already[cur2]);
+                const sql11 = 'insert into sequence values (?,?)'
+                await db.query(sql11,[minId,maxId])
+                already.push(old[cur1]);
+                old.splice(cur1,1);
+            }
+        }
         return projectId
     },
     restartProject: async (projectId) => {
         const sql1 = 'select * from participate where project = ?'
         const tasks = await db.query(sql1,projectId)
-        const sql = 'update task set done = 0 where project = ?'
+        const sql = 'update task set done = 0 where project = ? and done = 2'
         return await db.query(sql, projectId)
         var staffs = []
         for (var i = 0; i < tasks.length; i++) {
@@ -165,6 +218,40 @@ module.exports = {
         }
 
     },
+    createProject:async (projectName,sorts,staffIds,sources,targets)=>{
+        for(var i = 0;i<staffIds.length;i++){
+            const msg = 'insert into messagebox values ("管理员开启了新的项目，请查看任务",?,null,0)'
+            await db.query(msg,staffIds[i]);
+        }
+        const sql = 'select * from task order by project desc'
+        const tasks = await db.query(sql)
+        var projectId = 0
+        if (tasks.size === 0) {
+            projectId = 0;
+        } else {
+            projectId = tasks[0].project + 1;
+        }
+        const sql1 = 'select * from task order by id desc '
+        const topTask = await db.query(sql1)
+        const offset = topTask[0].id;
+        const sql2 = 'insert into tasks values(null,?,?,0)'
+        const sql3 = 'insert into perform values (?,?,?,null,0)'
+        for(var i=0;i<sorts.length;i++){
+            await db.query(sql2,[sorts[i],projectId])
+            await db.query(sql3,[staffIds[0],i+1+offset,staffIds[0]])
+
+        }
+
+        const sql4 = 'insert into sequence values (?,?)'
+        await db.query(sql4,[sources[i],targets[i]])
+        var theAccounts = unique(staffIds)
+        const sql5 = 'insert into participate values (?,?,0)'
+        for(var i=0;i<theAccounts.length;i++){
+            await db.query(sql5,[theAccounts[0],projectId])
+        }
+        const sql6 = 'insert into projectName values (?,?)'
+        await db.query(sql6,[projectName,projectId])
+    },
     findParticipateProject: async () => {
         const sql = 'select * from participate order by project asc '
         return await db.query(sql)
@@ -174,8 +261,12 @@ module.exports = {
         return await db.query(sql)
     },
     checkTheTaskByProject:async(project)=>{
-        const sql = 'select * from task where project = ? order by orderid asc';
+        const sql = 'select * from task where project = ?';
         return await db.query(sql,project)
+    },
+    getTheSequence:async (id) =>{
+        const sql = 'select * from sequence where thisTask = ? or nextTask = ?'
+        return await db.query(sql,[id,id])
     }
 
 }

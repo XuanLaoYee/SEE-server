@@ -25,7 +25,18 @@ module.exports = {
     getTheProjectName: async (project) =>{
         const sql = 'select * from projectname where project = ?'
         return await db.query(sql,project)
+    },
+    getIsDone: async (id)=>{
+        const sql = 'select * from task where id = ?'
+        const theTask  = await db.query(sql,id)
+        return theTask[0].done;
+    },
+    getTheSort:async (id)=>{
+        const sql = 'select * from task where id = ?'
+        const theTask = await db.query(sql,id);
+        return theTask[0].sort;
     }
+
 
 
 

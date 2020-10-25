@@ -19,7 +19,7 @@ adminRouter
     .post('/api/checkStaffB',adminController.checkStaffB)
     .post('/api/checkStaffC',adminController.checkStaffC)
     .post('/api/checkAllStaff',adminController.checkAllStaff)
-
+    .post('/api/admin/createProject',adminController.createProject)
 
 
 module.exports = adminRouter;

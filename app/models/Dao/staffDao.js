@@ -118,21 +118,25 @@ module.exports = {
         return await db.query(sql,id)
     },
     isCanDoThisTask:async (id,account)=>{
-        const sql = 'select * from perform where id = ? and account = ?';
+        const sql = 'select * from perform where id = ? and (account = ? or executor = ?) ';
         const theTask = await db.query(sql,[id,account])
         if(theTask.length !== 0){
-            const sql1 = 'select * from task where id = ? and done = 0';
-            const theTask1 = await db.query(sql1,id);
-            if(theTask1.length!==0){
-                if(theTask1[0].orderid===1){
-                    return true;
-                }else {
-                    const sql2 = 'select * from task where id = ? and done = 1 and orderid = ?';
-                    const theTask2 = await db.query(sql1,[id,theTask1[0].orderid-1]);
-                    if(theTask2.length!==0){
-                        return true;
+            let theTaskId = theTask[0].id;
+            // const sql1 = 'select * from task where project = ?';
+            // const tasks = await db.query(sql1,theTask[0].project)
+            const sql2 = 'select * from sequence where nextTask = ?'
+            const theProTasks = await db.query(sql2,[theTaskId])
+            if(theProTasks.length===0){
+                return true;
+            }else{
+                for(var i=0;i<theProTasks.length;i++){
+                    const sql3 = 'select * from task where id = ? and done = 1';
+                    const tempTask = await db.query(sql3,theProTasks[i].thisTask)
+                    if(tempTask.length === 0){
+                        return false;
                     }
                 }
+                return true;
             }
         }
         return false;
