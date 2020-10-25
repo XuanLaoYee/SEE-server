@@ -166,13 +166,16 @@ module.exports = {
 
     },
     findParticipateProject: async () => {
-        const sql = 'select * from participate'
+        const sql = 'select * from participate order by project asc '
         return await db.query(sql)
     },
     checkAllProjects: async () => {
         const sql = 'select * from task';
         return await db.query(sql)
     },
-
+    checkTheTaskByProject:async(project)=>{
+        const sql = 'select * from task where project = ? order by orderid asc';
+        return await db.query(sql,project)
+    }
 
 }

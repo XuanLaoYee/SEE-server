@@ -65,12 +65,29 @@ module.exports = {
         projects = []
         projectNames = []
         dones = []
-        for(var i=0;i<participates.length;i++){
-            accounts.push(participates[i].account)
-            projects.push(participates[i].project)
-            const projectName = await ItemDao.getTheProjectName(participates[i].project)
+        if(participates.length !== 0){
+            let tempProject = participates[0].project;
+            projects.push(participates[0].project)
+            dones.push(participates[0].done)
+            const projectName = await ItemDao.getTheProjectName(participates[0].project)
             projectNames.push(projectName[0].name);
-            dones.push(participates[i].done)
+            accountArray = []
+            accountArray.push(participates[0].account)
+
+            for(var i=1;i<participates.length;i++){
+                if(participates[i].project !== tempProject){
+                    accounts.push(accountArray);
+                    accountArray = [];
+                    tempProject = participates[i].project;
+                    projects.push(tempProject[i].project);
+                    dones.push(participates[i].done);
+                    const projectName = await ItemDao.getTheProjectName(participates[i].project)
+                    projectNames.push(projectName[0].name);
+                }else{
+                    accounts.push(participates[i].account)
+                }
+            }
+            accounts.push(accountArray);
         }
         ctx.body = {
             code:'001',
@@ -121,22 +138,22 @@ module.exports = {
             }
             return
         }
-        const theProjects = await adminDao.checkAllProjects()
+        let {project} = ctx.request.body;
+        const theProjects = await adminDao.checkTheTaskByProject(project)
         ids = []
         sorts = []
         orderIds = []
         projects = []
-        projectNames = []
         dones = []
         for(var i=0;i<theProjects.length;i++){
             ids.push(theProjects[i].id)
             sorts.push(theProjects[i].sort)
             orderIds.push(theProjects[i].orderid)
             projects.push(theProjects[i].project)
-            const projectName = await ItemDao.getTheProjectName(theProjects[i].project)
-            projectNames.push(projectName[0].name)
             dones.push(theProjects[i].done)
         }
+        const projectName = await ItemDao.getTheProjectName(theProjects[0].project)
+        projectNames = projectName[0].name
         ctx.body = {
             code:'001',
             ids,
@@ -183,12 +200,16 @@ module.exports = {
     checkAllStaff:async ctx=>{
         const users = await userDao.checkAllStaff();
         var accounts = []
+        var sorts = []
         for(var i = 0;i<users.length;i++){
             accounts.push(users[i].account)
+            sorts.push(users[i].sort)
         }
         ctx.body = {
             code:'001',
-            accounts
+            accounts,
+            sorts
         }
-    }
+    },
+
 }
