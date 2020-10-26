@@ -16,16 +16,6 @@ function now() {
 }
 
 
-function startRecyle() {
-    const sql = 'select * from perform where transfer = 1';
-    const tasks = db.query(sql)
-    console.log(tasks[0].deadline)
-    for (var i = 0; i < tasks.length; i++) {
-        setTimeGuider(tasks[i].deadline)
-    }
-}
-
-
 module.exports = {
     insertSubTask: async (sort, project) => {
         const sql = 'insert into task values(null ,?,?,0) '

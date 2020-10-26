@@ -30,7 +30,7 @@ create table perform(
     account char(40) not null ,
     id int not null ,
     executor char(40) not null ,
-    deadline timestamp,
+    deadline long ,
     transfer int not null,
     constraint FK_account foreign key (account) references staff (account),
     constraint FK_id foreign key (id) references task(id),
@@ -63,8 +63,8 @@ insert into staff values ('4','4','B','四娃');
 insert into staff values ('5','5','C','五娃');
 insert into staff values ('6','6','C','六娃');
 
-insert into admin values ('admin','admin','孙狗');
-insert into admin values ('lww','111111','老逼登');
+insert into admin values ('admin','admin','老逼登');
+insert into admin values ('sxc','111111','孙狗');
 
 insert into task values (null,'A',1,0);
 insert into perform values ('1',1,'1',null,0);
@@ -121,9 +121,9 @@ insert into perform values ('5',25,'5',null,0);
 insert into task values (null,'A',3,0);
 insert into perform values ('2',26,'2',null,0);
 insert into task values (null,'B',3,0);
-insert into perform values ('3',27,'3',null,0);
+insert into perform values ('3',27,'4',1603721061428,1);
 insert into task values (null,'C',3,0);
-insert into perform values ('6',28,'6',null,0);
+insert into perform values ('6',28,'5',1603731061428,1);
 insert into task values (null,'B',3,0);
 insert into perform values ('4',29,'4',null,0);
 insert into task values (null,'A',3,0);
@@ -178,6 +178,8 @@ insert into sequence values (5,6);
 insert into sequence values (6,7);
 insert into sequence values (7,8);
 insert into sequence values (8,9);
+insert into sequence values (9,null);
+
 insert into sequence values(10,11);
 insert into sequence values(10,13);
 insert into sequence values(10,12);
@@ -198,6 +200,8 @@ insert into sequence values(23,21);
 insert into sequence values(21,24);
 insert into sequence values(22,24);
 insert into sequence values(24,25);
+insert into sequence values(25,null);
+
 insert into sequence values(26,29);
 insert into sequence values(27,30);
 insert into sequence values(28,31);
@@ -213,3 +217,4 @@ insert into sequence values(35,37);
 insert into sequence values(36,37);
 insert into sequence values(37,38);
 insert into sequence values(38,39);
+insert into sequence values(39,null);

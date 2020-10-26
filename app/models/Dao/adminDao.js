@@ -110,6 +110,10 @@ module.exports = {
         const sql3 = 'update task set done = 2 where project = ? and done = 0';
         await db.query(sql3,[project])
     },
+    getTheSequence:async (id) =>{
+        const sql = 'select * from sequence where thisTask = ?'
+        return await db.query(sql,id)
+    },
     startNewProject: async (subNums,projectName) => {
         const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
@@ -166,7 +170,7 @@ module.exports = {
         await db.query(sql10,[projectName,projectId])
         let already = [];
         let old = [];
-        for(var i=0;i<subNums;i++){
+        for(let i=0;i<subNums;i++){
             old.push(projects[i].id)
         }
         while(old.length>0){
@@ -183,6 +187,14 @@ module.exports = {
                 await db.query(sql11,[minId,maxId])
                 already.push(old[cur1]);
                 old.splice(cur1,1);
+            }
+        }
+        for(let i=0;i<projects.length;i++){
+            const sql = 'select * from sequence where thisTask = ?'
+            const proTasks = await db.query(sql,projects[i].id)
+            if(proTasks.length === 0){
+                const sql12 = 'insert into sequence values (?,null)'
+                await db.query(sql12,projects[i].id)
             }
         }
         return projectId
@@ -254,9 +266,6 @@ module.exports = {
         const sql = 'select * from task where project = ?';
         return await db.query(sql,project)
     },
-    getTheSequence:async (id) =>{
-        const sql = 'select * from sequence where thisTask = ?'
-        return await db.query(sql,id)
-    }
+
 
 }

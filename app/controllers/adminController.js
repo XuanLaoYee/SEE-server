@@ -68,14 +68,14 @@ function isCycle(sources, targets) { //判断DAG是否成环,成环是false
 module.exports = {
     startProject: async ctx => {
         let {nums, projectName} = ctx.request.body;
-        // let userKind = ctx.session.user.userKind
-        // if (userKind !== "admin") {
-        //     ctx.body = {
-        //         code: '403',
-        //         msg: '您无权操作'
-        //     }
-        //     return
-        // }
+        let userKind = ctx.session.user.userKind
+        if (userKind !== "admin") {
+            ctx.body = {
+                code: '403',
+                msg: '您无权操作'
+            }
+            return
+        }
         projectId = await adminDao.startNewProject(nums, projectName)
         ctx.body = {
             code: '001',
@@ -117,14 +117,14 @@ module.exports = {
     },
     createProject: async ctx => {
         let {projectName, sorts, accounts, sources, targets} = ctx.request.body;
-        // let userKind = ctx.session.user.userKind
-        // if (userKind !== "admin") {
-        //     ctx.body = {
-        //         code: '403',
-        //         msg: '您无权操作'
-        //     }
-        //     return
-        // }
+        let userKind = ctx.session.user.userKind
+        if (userKind !== "admin") {
+            ctx.body = {
+                code: '403',
+                msg: '您无权操作'
+            }
+            return
+        }
         if (!isCycle(sources, targets)) {
             ctx.body = {
                 code: '000',
@@ -139,14 +139,14 @@ module.exports = {
     },
     findParticipateProject: async ctx => {
         const participates = await adminDao.findParticipateProject()
-        // let userKind = ctx.session.user.userKind
-        // if (userKind !== "admin") {
-        //     ctx.body = {
-        //         code: '403',
-        //         msg: '您无权操作'
-        //     }
-        //     return
-        // }
+        let userKind = ctx.session.user.userKind
+        if (userKind !== "admin") {
+            ctx.body = {
+                code: '403',
+                msg: '您无权操作'
+            }
+            return
+        }
         accounts = []
         projects = []
         projectNames = []
@@ -235,17 +235,25 @@ module.exports = {
 
         for (var i = 0; i < theProjects.length; i++) {
             const oneSequence = await adminDao.getTheSequence(theProjects[i].id);
-            console.log(oneSequence[0])
-            const sourcesDone = await ItemDao.getIsDone(oneSequence[0].thisTask);
-            const targetsDone = await ItemDao.getIsDone(oneSequence[0].nextTask);
-            const sourcesSort = await ItemDao.getTheSort(oneSequence[0].thisTask);
-            const targetsSort = await ItemDao.getTheSort(oneSequence[0].nextTask);
-            sources.push(oneSequence[0].thisTask)
-            targets.push(oneSequence[0].nextTask)
-            sourcesSorts.push(sourcesSort)
-            targetSorts.push(targetsSort)
-            sourcesDones.push(sourcesDone)
-            targetsDones.push(targetsDone)
+            // console.log(oneSequence)
+            for(let j=0;j<oneSequence.length;j++){
+                let sourcesDone = await ItemDao.getIsDone(oneSequence[j].thisTask);
+                let sourcesSort = await ItemDao.getTheSort(oneSequence[j].thisTask);
+                sources.push(oneSequence[j].thisTask)
+                sourcesSorts.push(sourcesSort)
+                sourcesDones.push(sourcesDone)
+                if(oneSequence[j].nextTask === null){
+                    targetsDones.push(null)
+                    targetSorts.push(null)
+                    targets.push(null)
+                }else {
+                    let targetsDone = await ItemDao.getIsDone(oneSequence[j].nextTask);
+                    let targetsSort = await ItemDao.getTheSort(oneSequence[j].nextTask);
+                    targets.push(oneSequence[j].nextTask)
+                    targetSorts.push(targetsSort)
+                    targetsDones.push(targetsDone)
+                }
+            }
         }
         const projectName = await ItemDao.getTheProjectName(theProjects[0].project)
         theProjectName = projectName[0].name

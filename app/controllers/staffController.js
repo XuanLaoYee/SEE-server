@@ -114,6 +114,13 @@ module.exports = {
     },
     transferTask:async ctx =>{
         let{otherAccount,id,deadline} = ctx.request.body;
+        if(ctx.session.user === null || ctx.session.user === undefined || ctx.session.user.length ===0){
+            ctx.body = {
+                code:'401',
+                msg:'您未登录或者登录已失效'
+            }
+            return
+        }
         let account = ctx.session.user.account;
         let theTask = await staffDao.checkIsMyAndCanDo(id,account)
         if(theTask===null){
@@ -140,6 +147,13 @@ module.exports = {
         }
     },
     recycleTask:async ctx => {
+        if(ctx.session.user === null || ctx.session.user === undefined || ctx.session.user.length ===0){
+            ctx.body = {
+                code:'401',
+                msg:'您未登录或者登录已失效'
+            }
+            return
+        }
         let account = ctx.session.user.account;
         let{id} = ctx.request.body;
         let theTask = await staffDao.recycleTask(id,account)
@@ -148,6 +162,13 @@ module.exports = {
         }
     },
     allMyTask:async ctx=> {
+        if(ctx.session.user === null || ctx.session.user === undefined || ctx.session.user.length ===0){
+            ctx.body = {
+                code:'401',
+                msg:'您未登录或者登录已失效'
+            }
+            return
+        }
         let account = ctx.session.user.account;
         let tasks = await staffDao.allMyTask(account);
         let ids = []
@@ -173,6 +194,14 @@ module.exports = {
         }
     },
     checkSameStaff:async ctx => {
+
+        if(ctx.session.user === null || ctx.session.user === undefined || ctx.session.user.length ===0){
+            ctx.body = {
+                code:'401',
+                msg:'您未登录或者登录已失效'
+            }
+            return
+        }
         let account = ctx.session.user.account;
         const sort = await userDao.checkMySort(account)
         var accounts = []
@@ -203,14 +232,14 @@ module.exports = {
         }
     },
     echo:async  ctx =>{
-        let account = ctx.session.user.account;
-        if(account === null || account.length === 0){
+        if(ctx.session.user === null || ctx.session.user === undefined || ctx.session.user.length ===0){
             ctx.body = {
-                code:'000',
+                code:'401',
                 msg:'您未登录或者登录已失效'
             }
             return
         }
+        let account = ctx.session.user.account;
         ctx.body = {
             code:'001',
             account
