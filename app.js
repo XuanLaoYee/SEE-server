@@ -6,6 +6,54 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 var enforceHttps = require('koa-sslify').default;
+const ItemDao = require('./app/models/Dao/ItemsDao')
+
+function setRegular(targetTime){
+    var timeInterval,nowTime,nowSeconds,targetSeconds
+
+    nowTime = new Date()
+    // 计算当前时间的秒数
+
+    nowSeconds = nowTime.getHours() * 3600 + nowTime.getMinutes() * 60 + nowTime.getSeconds()
+
+    let theSplit = targetTime.split(":")
+    let Hour = Number(theSplit[0])
+    let Minute = Number(theSplit[1])
+    let Second = Number(theSplit[2])
+
+    // 计算目标时间对应的秒数
+    targetSeconds =  Hour * 3600 + Minute * 60 + Second
+
+    //  判断是否已超过今日目标小时，若超过，时间间隔设置为距离明天目标小时的距离
+    timeInterval = targetSeconds > nowSeconds ? targetSeconds - nowSeconds: targetSeconds + 24 * 3600 - nowSeconds
+    setTimeout(getProductFileList,timeInterval * 1000)
+}
+
+function now() {
+    nowTime = new Date()
+    // 计算当前时间的秒数
+    return nowTime.getTime();
+}
+
+function getProductFileList(){
+    ItemDao.recyleTaskByTime(now())//你自己的数据处理函数
+    setTimeout(getProductFileList,24*3600 * 1000)//之后每天调用一次
+}
+
+setRegular("20:05:00");
+setRegular("20:05:05");
+setRegular("20:05:07");
+setRegular("20:05:09");
+setRegular("20:05:30");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+// setRegular("20:02:00");
+
+
 
 
 let { Port, staticDir } = require('./config');

@@ -123,6 +123,17 @@ module.exports = {
             }
             return
         }
+        if(deadline !== null){
+            let nowTime = new Date()
+            let time = nowTime.getTime();
+            if(time>deadline){
+                ctx.body = {
+                    code:'000',
+                    msg:'设置截止时间不能早于当前时间'
+                }
+                return
+            }
+        }
         await staffDao.transforTheTask(id,otherAccount,deadline)
         ctx.body = {
             code:'001'

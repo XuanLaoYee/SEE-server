@@ -18,11 +18,11 @@ let CONFIG = {
   maxAge: 86400000,
   autoCommit: true,
   overwrite: true,
-  httpOnly: true,
+  httpOnly: false,
   signed: true,
   rolling: false,
   renew: false,
-  sameSite: null,
+  sameSite: 'none',
   store
 }
 

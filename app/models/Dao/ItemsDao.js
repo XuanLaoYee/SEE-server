@@ -46,6 +46,7 @@ module.exports = {
         return theTask[0].sort;
     },
     recyleTaskByTime:async (time)=>{
+        // console.log(time);
         const sql = 'select * from perform where deadline <= ? and transfer = 1';
         const performs = db.query(sql,time);
         const msg = 'insert into messagebox values ("您的"+?+"号任务执行时间已超时,执行权被自动回收",?,null,0)'
