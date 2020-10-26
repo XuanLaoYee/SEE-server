@@ -143,8 +143,11 @@ module.exports = {
         let executors = []
         let deadlines = []
         let transfers = []
+        let dones = []
         for(var i=0;i<tasks.length;i++){
             ids.push(tasks[i].id)
+            const done = await ItemDao.getIsDone(tasks[i].id)
+            dones.push(done)
             executors.push(tasks[i].executor)
             deadlines.push(tasks[i].deadline)
             transfers.push(tasks[i].transfer)
@@ -154,7 +157,8 @@ module.exports = {
             ids,
             executors,
             deadlines,
-            transfers
+            transfers,
+            dones
         }
     },
     checkSameStaff:async ctx => {

@@ -1,10 +1,19 @@
 const db = require('./db')
 
+function isInArray(arr, value) {
+    for (var i = 0; i < arr.length; i++) {
+        if (value === arr[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 module.exports = {
-    insertSubTask: async (sort,order,project) =>{
-        const sql = 'insert into task values(null ,?,?,?,0) '
-        return await db.query(sql, [sort,order,project]);
+    insertSubTask: async (sort,project) =>{
+        const sql = 'insert into task values(null ,?,?,0) '
+        return await db.query(sql, [sort,project]);
     },
     insertPerform: async (account,id,executor) =>{
         const sql = 'insert into perform values(?,?,?,null,0)';
@@ -35,6 +44,15 @@ module.exports = {
         const sql = 'select * from task where id = ?'
         const theTask = await db.query(sql,id);
         return theTask[0].sort;
+    },
+    recyleTaskByTime:async (time)=>{
+        const sql = 'select * from perform where deadline <= ? and transfer = 1';
+        const performs = db.query(sql,time);
+        const msg = 'insert into messagebox values ("您的"+?+"号任务执行时间已超时,执行权被自动回收",?,null,0)'
+        for(let i =0;i<performs.length;i++){
+            await db.query(msg,performs[i].id,performs[i].executor)
+
+        }
     }
 
 

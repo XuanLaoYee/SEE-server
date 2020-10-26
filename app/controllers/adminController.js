@@ -236,8 +236,8 @@ module.exports = {
             const targetsDone = ItemDao.getIsDone(oneSequence[0].nextTask);
             const sourcesSort = ItemDao.getTheSort(oneSequence[0].thisTask);
             const targetsSort = ItemDao.getTheSort(oneSequence[0].nextTask);
-            sources.push(oneSequence[i].thisTask)
-            targets.push(oneSequence[i].nextTask)
+            sources.push(oneSequence[0].thisTask)
+            targets.push(oneSequence[0].nextTask)
             sourcesSorts.push(sourcesSort)
             targetSorts.push(targetsSort)
             sourcesDones.push(sourcesDone)
