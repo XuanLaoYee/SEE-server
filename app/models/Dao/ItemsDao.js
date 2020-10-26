@@ -49,9 +49,12 @@ module.exports = {
         const sql = 'select * from perform where deadline <= ? and transfer = 1';
         const performs = db.query(sql,time);
         const msg = 'insert into messagebox values ("您的"+?+"号任务执行时间已超时,执行权被自动回收",?,null,0)'
+        const msg1 = 'insert into messagebox values ("您委托的"+?+"号任务在规定时间内未完成,执行权被自动回收",?,null,0)'
         for(let i =0;i<performs.length;i++){
-            await db.query(msg,performs[i].id,performs[i].executor)
-
+            await db.query(msg,[performs[i].id,performs[i].executor])
+            await db.query(msg1,[performs[i].id,performs[i].account])
+            const sql2 = 'update perform set executor = ? and transfer = 0 where id = ?';
+            await db.query(sql2,[performs[i].account,performs[i].id])
         }
     }
 

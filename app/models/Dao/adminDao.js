@@ -100,7 +100,7 @@ module.exports = {
                 staffs.push(tasks[i].account);
             }
         }
-        await db.query(sql, project)
+        // await db.query(sql, project)
         for(var i= 0 ;i<staffs.length;i++){
             const msg = 'insert into msg values ("管理员已暂停"+?+"号项目",?,null,1)';
             await db.query(msg,[project,staffs[i]])
@@ -203,6 +203,8 @@ module.exports = {
             const msg = 'insert into msg values ("管理员已重启"+?+"号项目",?,null,1)';
             await db.query(msg, [projectId, staffs[i]])
         }
+        const sql3 = 'update participate set done = 0 where project = ?'
+        await db.query(sql3,[projectId])
 
     },
     createProject:async (projectName,sorts,staffIds,sources,targets)=>{
