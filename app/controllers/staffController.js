@@ -84,7 +84,7 @@ module.exports = {
         let{project} = ctx.request.body;
         let account = ctx.session.user.account
         const theProject = await staffDao.checkIsMyProject(account,project)
-        if(projects.length === 0){
+        if(theProject.length === 0){
             ctx.body = {
                 code:'000',
                 msg:'这不是您参与的项目，您无权查看'
@@ -96,10 +96,10 @@ module.exports = {
         var dones = []
         var canDos = []
         for(var i=0;i<projects.length;i++){
-            tasks.push(projects[i].id)
-            const theTask = await checkTheTask(projects[i].id)
+            tasks.push(projects[i])
+            const theTask = await staffDao.checkTheTask(projects[i])
             dones.push(theTask[0].done)
-            if(await staffDao.isCanDoThisTask(projects[i].id,account)){
+            if(await staffDao.isCanDoThisTask(projects[i],account)){
                 canDos.push(1)
             }else{
                 canDos.push(0)

@@ -136,14 +136,14 @@ module.exports = {
     },
     findParticipateProject:async ctx =>{
         const participates = await adminDao.findParticipateProject()
-        let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
-            ctx.body = {
-                code: '403',
-                msg: '您无权操作'
-            }
-            return
-        }
+        // let userKind = ctx.session.user.userKind
+        // if (userKind !== "admin") {
+        //     ctx.body = {
+        //         code: '403',
+        //         msg: '您无权操作'
+        //     }
+        //     return
+        // }
         accounts = []
         projects = []
         projectNames = []
@@ -167,7 +167,7 @@ module.exports = {
                     const projectName = await ItemDao.getTheProjectName(tempProject)
                     projectNames.push(projectName[0].name);
                 }else{
-                    accounts.push(participates[i].account)
+                    accountArray.push(participates[i].account)
                 }
             }
             accounts.push(accountArray);
@@ -189,8 +189,8 @@ module.exports = {
             }
             return
         }
-        let{ids,orders} = ctx.request.body;//TODO
-        await adminDao.changeOrders(ids,orders)
+        let{sources,targets} = ctx.request.body;//TODO
+        await adminDao.changeOrders(sources,targets)
         ctx.body = {
             code:'001',
             msg:'修改成功'

@@ -119,7 +119,7 @@ module.exports = {
     },
     isCanDoThisTask:async (id,account)=>{
         const sql = 'select * from perform where id = ? and (account = ? or executor = ?) ';
-        const theTask = await db.query(sql,[id,account])
+        const theTask = await db.query(sql,[id,account,account])
         if(theTask.length !== 0){
             let theTaskId = theTask[0].id;
             // const sql1 = 'select * from task where project = ?';

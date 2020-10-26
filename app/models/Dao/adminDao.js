@@ -81,22 +81,8 @@ module.exports = {
             await db.query(sql9, [account, tasks[0].project])
         }
     },
-    changeOrders: async (ids, orders) => {
-        for (var i = 0; i < ids.size; i++) {
-            const sql = 'update task set order =? where id =?'
-            await db.query(sql, [orders[i], ids[i]])
-        }
-        var staffs = []
-        for (var i = 0; i < ids.length; i++) {
-            const sql1 = 'select * from perform where id = ?  '
-            const theStaff = await db.query(sql1, [ids[i]])
-            if (isInArray(staffs, theStaff[0].account)) {
-                staffs.push(theStaff[0].account)
-            }
-            if (isInArray(staffs, theStaff[0].executor)) {
-                staffs.push(theStaff[0].executor)
-            }
-        }
+    changeOrders: async (sources,targets) => {
+
         const sql2 = 'select * from task where id = ?'
         const project = await db.query(sql2, ids[0])
         for (var i = 0; i < staffs.length; i++) {
@@ -170,7 +156,7 @@ module.exports = {
             }
             const sql8 = 'select * from participate where project = ? and account = ?'
             const b = await db.query(sql8, [projectId, accountTemp])
-            if (b.size !== 0) {
+            if (b.size === 0) {
                 sql9 = 'insert into participate values (?,?,0)'
                 await db.query(sql9, [accountTemp, projectId])
             }
