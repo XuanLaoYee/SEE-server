@@ -216,14 +216,14 @@ module.exports = {
         }
     },
     checkAllProjects: async ctx => {
-        // let userKind = ctx.session.user.userKind
-        // if (userKind !== "admin") {
-        //     ctx.body = {
-        //         code: '403',
-        //         msg: '您无权操作'
-        //     }
-        //     return
-        // }
+        let userKind = ctx.session.user.userKind
+        if (userKind !== "admin") {
+            ctx.body = {
+                code: '403',
+                msg: '您无权操作'
+            }
+            return
+        }
         let {project} = ctx.request.body;
         const theProjects = await adminDao.checkTheTaskByProject(project)
         sources = []
@@ -319,5 +319,4 @@ module.exports = {
             sorts
         }
     },
-
 }

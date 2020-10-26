@@ -202,6 +202,20 @@ module.exports = {
             userNames
         }
     },
+    echo:async  ctx =>{
+        let account = ctx.session.user.account;
+        if(account === null || account.length === 0){
+            ctx.body = {
+                code:'000',
+                msg:'您未登录或者登录已失效'
+            }
+            return
+        }
+        ctx.body = {
+            code:'001',
+            account
+        }
+    }
 
 
 }

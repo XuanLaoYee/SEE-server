@@ -51,11 +51,43 @@ module.exports = {
         await db.query(sql2, [deadline, id])
         await db.query(sql3,[id])
         const oldStaff = await db.query(sql,[id])
+        const msg1 = 'insert into messagebox values (?,?,?,2)'
         if(deadline !== null){
-            const msg1 = 'insert into messagebox values ("您好,我已将我的"+?+"号子任务移交给您,请您在"+?+"之前完成，谢谢",?,?,2)'
             const theTime = timestamps2string(deadline)
-            await db.query(msg1,[id,theTime,account,oldStaff[0].account])
+            await db.query(msg1,["您好,我已将我的"+id.toString()+"号子任务移交给您,请您在"+theTime+"之前完成,谢谢",account,oldStaff[0].account])
+            setTimeGuider(deadline)
+        }else{
+            await db.query(msg1,["您好,我已将我的"+id.toString()+"号子任务移交给您,谢谢",account,oldStaff[0].account])
         }
+        async function recyleTaskByTime(time){
+            // console.log(time);
+            const sql = 'select * from perform where deadline <= ? and transfer = 1';
+            const performs = await db.query(sql, time);
+            const msg = 'insert into messagebox values (?,?,null,0)'
+            const msg1 = 'insert into messagebox values (?,?,null,0)'
+            for (let i = 0; i < performs.length; i++) {
+                await db.query(msg, ["您的"+(performs[i].id).toString()+"号任务执行时间已超时,执行权被自动回收", performs[i].executor])
+                await db.query(msg1, ["您委托的"+(performs[i].id).toString()+"号任务在规定时间内未完成,执行权被自动回收", performs[i].account])
+                const sql2 = 'update perform set executor = ? where id = ?';
+                await db.query(sql2, [performs[i].account, performs[i].id])
+                const sql3 = 'update perform set transfer = 0 where id = ?'
+                await db.query(sql3,performs[i].id)
+                const sql4 = 'update perform set deadline = null where id = ?'
+                await db.query(sql4,performs[i].id)
+            }
+        }
+        function getProductFileList() {
+            recyleTaskByTime(now() + 5000)//你自己的数据处理函数，加个5s的预取
+            // setTimeout(getProductFileList, 24 * 3600 * 1000)//之后每天调用一次
+        }
+        function setTimeGuider(targetTime){
+            nowTime = new Date()
+            nowSeconds = nowTime.getTime();
+            timeInterval = targetTime > nowSeconds ? (targetTime - nowSeconds) / 1000 : 0
+            setTimeout(getProductFileList, timeInterval)
+        }
+
+
     },
     findOngoingTask: async (account, id) => {
         const sql = 'select * from perform where id = ? and account = ? and transfer = 1'
@@ -72,8 +104,8 @@ module.exports = {
         const sql2 = 'update perform set transfer = 0 where executor = ? and account = ? and id = ?'
         await db.query(sql2,[account,account,id])
         await db.query(sql,[account,id])
-        const msg = 'insert into messagebox values ("交由您的"+?+"号任务已被我收回",?,?,2)'
-        await db.query(msg,[id,theExecutor[0].executor,account,])
+        const msg = 'insert into messagebox values (?,?,?,2)'
+        await db.query(msg,["交由您的"+id.toString()+"号任务已被我收回",theExecutor[0].executor,account,])
     },
     allMyTask: async (account) => {
         const sql = 'select * from perform where account = ?';
