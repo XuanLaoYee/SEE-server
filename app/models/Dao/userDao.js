@@ -14,9 +14,9 @@ module.exports = {
         return await db.query(sql)
     },
     checkMySort:async (account)=>{
-        const sql = 'select sort from staff where account = ?';
+        const sql = 'select * from staff where account = ?';
         const sort =  await db.query(sql,account)
-        return sort[0];
+        return sort[0].sort;
     },
     checkAllStaff:async ()=>{
         const sql = 'select * from staff'
