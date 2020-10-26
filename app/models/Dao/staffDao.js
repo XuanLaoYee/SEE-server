@@ -77,7 +77,7 @@ module.exports = {
     },
     allMyTask: async (account) => {
         const sql = 'select * from perform where account = ?';
-        return await db.query(account)
+        return await db.query(sql,account)
     },
     findParticipateProject:async (account) => {
         const sql = 'select * from participate where account = ?'

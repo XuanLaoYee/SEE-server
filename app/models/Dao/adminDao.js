@@ -82,12 +82,13 @@ module.exports = {
         }
     },
     changeOrders: async (sources,targets) => {
-
-        const sql2 = 'select * from task where id = ?'
-        const project = await db.query(sql2, ids[0])
-        for (var i = 0; i < staffs.length; i++) {
-            const msg = 'insert into messagebox values ("管理员已调整"+?+"号任务顺序",?,null,1)'
-            await db.query(msg, [project[0].project, staffs[i]])
+        for(var i = 0;i<sources.length;i++){
+            const  sql4 = 'delete * from sequence where thisTask = ?';
+            await db.query(sql4,[sources[i]])
+        }
+        for(var i =0;i<sources;i++){
+            const sql5 = 'insert into sequence values (?,?)'
+            await db.query(sql5,[sources[i],targets[i]])
         }
     },
     terminationProject: async (project) => {

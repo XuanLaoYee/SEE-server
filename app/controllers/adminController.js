@@ -189,7 +189,7 @@ module.exports = {
             }
             return
         }
-        let{sources,targets} = ctx.request.body;//TODO
+        let{sources,targets} = ctx.request.body;
         await adminDao.changeOrders(sources,targets)
         ctx.body = {
             code:'001',
@@ -223,12 +223,6 @@ module.exports = {
         }
         let {project} = ctx.request.body;
         const theProjects = await adminDao.checkTheTaskByProject(project)
-        sortsDict = {}
-        donesDict = {}
-        for (var i=0;i<theProjects.length;i++){
-            sortsDict[theProjects[i].id] = theProjects[i].sort;
-            donesDict[theProjects[i].id] = theProjects[i].done;
-        }
         sources = []
         sourcesSorts = []
         targetSorts = []
@@ -238,10 +232,10 @@ module.exports = {
 
         for(var i=0;i<theProjects.length;i++){
             const oneSequence = adminDao.getTheSequence(theProjects[i].id);
-            const sourcesDone = ItemDao.getIsDone(oneSequence[i].thisTask);
-            const targetsDone = ItemDao.getIsDone(oneSequence[i].nextTask);
-            const sourcesSort = ItemDao.getTheSort(oneSequence[i].thisTask);
-            const targetsSort = ItemDao.getTheSort(oneSequence[i].nextTask);
+            const sourcesDone = ItemDao.getIsDone(oneSequence[0].thisTask);
+            const targetsDone = ItemDao.getIsDone(oneSequence[0].nextTask);
+            const sourcesSort = ItemDao.getTheSort(oneSequence[0].thisTask);
+            const targetsSort = ItemDao.getTheSort(oneSequence[0].nextTask);
             sources.push(oneSequence[i].thisTask)
             targets.push(oneSequence[i].nextTask)
             sourcesSorts.push(sourcesSort)
