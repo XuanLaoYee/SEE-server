@@ -162,9 +162,9 @@ module.exports = {
                     accounts.push(accountArray);
                     accountArray = [];
                     tempProject = participates[i].project;
-                    projects.push(tempProject[i].project);
+                    projects.push(tempProject);
                     dones.push(participates[i].done);
-                    const projectName = await ItemDao.getTheProjectName(participates[i].project)
+                    const projectName = await ItemDao.getTheProjectName(tempProject)
                     projectNames.push(projectName[0].name);
                 }else{
                     accounts.push(participates[i].account)
