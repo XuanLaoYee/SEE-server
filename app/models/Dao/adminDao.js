@@ -190,6 +190,8 @@ module.exports = {
     restartProject: async (projectId) => {
         const sql1 = 'select * from participate where project = ?'
         const tasks = await db.query(sql1,projectId)
+        const sql3 = 'update participate set done = 0 where project = ?'
+        await db.query(sql3,[projectId])
         const sql = 'update task set done = 0 where project = ? and done = 2'
         return await db.query(sql, projectId)
         var staffs = []
@@ -203,8 +205,7 @@ module.exports = {
             const msg = 'insert into msg values ("管理员已重启"+?+"号项目",?,null,1)';
             await db.query(msg, [projectId, staffs[i]])
         }
-        const sql3 = 'update participate set done = 0 where project = ?'
-        await db.query(sql3,[projectId])
+
 
     },
     createProject:async (projectName,sorts,staffIds,sources,targets)=>{
@@ -254,8 +255,8 @@ module.exports = {
         return await db.query(sql,project)
     },
     getTheSequence:async (id) =>{
-        const sql = 'select * from sequence where thisTask = ? or nextTask = ?'
-        return await db.query(sql,[id,id])
+        const sql = 'select * from sequence where thisTask = ?'
+        return await db.query(sql,id)
     }
 
 }

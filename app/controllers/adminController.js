@@ -213,14 +213,14 @@ module.exports = {
         }
     },
     checkAllProjects: async ctx =>{
-        let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
-            ctx.body = {
-                code: '403',
-                msg: '您无权操作'
-            }
-            return
-        }
+        // let userKind = ctx.session.user.userKind
+        // if (userKind !== "admin") {
+        //     ctx.body = {
+        //         code: '403',
+        //         msg: '您无权操作'
+        //     }
+        //     return
+        // }
         let {project} = ctx.request.body;
         const theProjects = await adminDao.checkTheTaskByProject(project)
         sources = []
@@ -231,17 +231,18 @@ module.exports = {
         targets = []
 
         for(var i=0;i<theProjects.length;i++){
-            const oneSequence = adminDao.getTheSequence(theProjects[i].id);
-            const sourcesDone = ItemDao.getIsDone(oneSequence[0].thisTask);
-            const targetsDone = ItemDao.getIsDone(oneSequence[0].nextTask);
-            const sourcesSort = ItemDao.getTheSort(oneSequence[0].thisTask);
-            const targetsSort = ItemDao.getTheSort(oneSequence[0].nextTask);
-            sources.push(oneSequence[0].thisTask)
-            targets.push(oneSequence[0].nextTask)
-            sourcesSorts.push(sourcesSort)
-            targetSorts.push(targetsSort)
-            sourcesDones.push(sourcesDone)
-            targetsDones.push(targetsDone)
+            const oneSequence = await adminDao.getTheSequence(theProjects[i].id);
+            console.log(oneSequence[0])
+            // const sourcesDone = ItemDao.getIsDone(oneSequence[0].thisTask);
+            // const targetsDone = ItemDao.getIsDone(oneSequence[0].nextTask);
+            // const sourcesSort = ItemDao.getTheSort(oneSequence[0].thisTask);
+            // const targetsSort = ItemDao.getTheSort(oneSequence[0].nextTask);
+            // sources.push(oneSequence[0].thisTask)
+            // targets.push(oneSequence[0].nextTask)
+            // sourcesSorts.push(sourcesSort)
+            // targetSorts.push(targetsSort)
+            // sourcesDones.push(sourcesDone)
+            // targetsDones.push(targetsDone)
         }
         const projectName = await ItemDao.getTheProjectName(theProjects[0].project)
         theProjectName = projectName[0].name
