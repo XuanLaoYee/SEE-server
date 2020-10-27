@@ -4,6 +4,13 @@
 let store = {
   storage: {},
   set (key, session) {
+    console.log(key)
+    console.log(session)
+    for(var cur in this.storage){
+      if(this.storage[cur].user.account === session.user.account){
+        delete this.storage[cur];
+      }
+    }
     this.storage[key] = session;
   },
   get (key) {

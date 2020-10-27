@@ -86,9 +86,14 @@ module.exports = {
             const  sql4 = 'delete from sequence where thisTask = ?';
             await db.query(sql4,[sources[i]])
         }
-        for(var i =0;i<sources;i++){
-            const sql5 = 'insert into sequence values (?,?)'
-            await db.query(sql5,[sources[i],targets[i]])
+        if(targets.length === 0){
+            const sql3 = 'insert into sequence values (?,null)'
+            await db.query(sql3,sources[0])
+        }else{
+            for(var i =0;i<targets.length;i++){
+                const sql5 = 'insert into sequence values (?,?)'
+                await db.query(sql5,[sources[i],targets[i]])
+            }
         }
     },
     terminationProject: async (project) => {

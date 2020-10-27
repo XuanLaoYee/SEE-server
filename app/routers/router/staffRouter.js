@@ -5,7 +5,7 @@ const staffController = require('../../controllers/staffController');
 let staffRouter = new Router();
 
 staffRouter
-    .post('/api/login',staffController.Login)
+    .post('/login',staffController.Login)
     .post('/api/staff/do',staffController.doWork)
     .post('/api/staff/myProject',staffController.checkMyProject)
     .post('/api/staff/checkProjectProgress',staffController.checkProjectProgress)
