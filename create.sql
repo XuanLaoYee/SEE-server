@@ -173,6 +173,7 @@ insert into sequence values (1,2);
 insert into sequence values (1,3);
 insert into sequence values (2,3);
 insert into sequence values (2,4);
+insert into sequence values (3,null);
 insert into sequence values (4,5);
 insert into sequence values (5,6);
 insert into sequence values (6,7);
