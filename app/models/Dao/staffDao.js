@@ -116,8 +116,8 @@ module.exports = {
         await db.query(msg,["交由您的"+id.toString()+"号任务已被我收回",theExecutor[0].executor,account,])
     },
     allMyTask: async (account) => {
-        const sql = 'select * from perform where account = ?';
-        return await db.query(sql,account)
+        const sql = 'select * from perform where account = ? or executor = ?';
+        return await db.query(sql,[account,account])
     },
     findParticipateProject:async (account) => {
         const sql = 'select * from participate where account = ?'

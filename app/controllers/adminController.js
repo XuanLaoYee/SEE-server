@@ -132,7 +132,9 @@ module.exports = {
             }
             return
         }
-        if (!isCycle(sources, targets)) {
+        var oldSources = sources.concat()
+        var oldTargets = targets.concat()
+        if (!isCycle(oldSources, oldTargets)) {
             ctx.body = {
                 code: '000',
                 msg: '您的分配的任务顺序产生闭环，无法创建'

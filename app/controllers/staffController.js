@@ -80,6 +80,21 @@ module.exports = {
             dones
         }
     },
+    checkTaskIsCanDo:async ctx=>{
+        let {id} = ctx.request.body;
+        let account = ctx.session.user.account
+        if(await staffDao.isCanDoThisTask(id,account)){
+            ctx.body = {
+                code:'001',
+                canDo:1
+            }
+        }else{
+            ctx.body = {
+                code:'001',
+                canDo:0
+            }
+        }
+    },
     checkProjectProgress:async ctx =>{
         let{project} = ctx.request.body;
         let account = ctx.session.user.account
@@ -197,7 +212,8 @@ module.exports = {
             executors,
             deadlines,
             transfers,
-            dones
+            dones,
+            canDos
         }
     },
     checkSameStaff:async ctx => {

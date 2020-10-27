@@ -14,5 +14,5 @@ staffRouter
     .post('/api/staff/recycleTask',staffController.recycleTask)//TODO
     .post('/api/staff/checkSameStaff',staffController.checkSameStaff)
     .post('/api/echo',staffController.echo)
-
+    .post('/api/staff/isCanDo',staffController.checkTaskIsCanDo)
 module.exports = staffRouter;

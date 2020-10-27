@@ -249,9 +249,14 @@ module.exports = {
 
         }
 
-        const sql4 = 'insert into sequence values (?,?)'
+        const sql4 = 'insert into sequence values (?,?)';
+        const sql7 = 'insert into sequence values (?,null)'
         for(let i = 0;i<sources.length;i++){
-            await db.query(sql4,[sources[i]+1+offset,targets[i]+1+offset])
+            if(targets[i] === null){
+                await db.query(sql7,sources[i]+offset)
+            }else{
+                await db.query(sql4,[sources[i]+offset,targets[i]+offset])
+            }
         }
         var theAccounts = unique(staffIds)
         const sql5 = 'insert into participate values (?,?,0)'
