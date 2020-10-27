@@ -110,8 +110,8 @@ module.exports = {
         const theExecutor = await db.query(sql1,[id])
         const sql = 'update perform set executor = ? where id = ?'
         const sql2 = 'update perform set transfer = 0 where executor = ? and account = ? and id = ?'
-        await db.query(sql2,[account,account,id])
         await db.query(sql,[account,id])
+        await db.query(sql2,[account,account,id])
         const msg = 'insert into messagebox values (?,?,?,2)'
         await db.query(msg,["交由您的"+id.toString()+"号任务已被我收回",theExecutor[0].executor,account,])
     },

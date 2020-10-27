@@ -200,6 +200,8 @@ module.exports = {
             return
         }
         let {sources, targets} = ctx.request.body;
+        console.log(sources)
+        console.log(targets)
         await adminDao.changeOrders(sources, targets)
         ctx.body = {
             code: '001',

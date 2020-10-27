@@ -13,7 +13,7 @@ adminRouter
     .post('/api/admin/restartProject',adminController.restartProject)
     .post('/api/admin/allProjects',adminController.findParticipateProject)
     .post('/api/admin/changeOrders',adminController.changeOrders) //TODO
-    .post('/api/admin/changeStaff',adminController.changePerformPerson)//TODO
+    .post('/api/admin/changeStaff',adminController.changePerformPerson)
     .post('/api/admin/checkProjectDetails',adminController.checkAllProjects)
     .post('/api/checkStaffA',adminController.checkStaffA)
     .post('/api/checkStaffB',adminController.checkStaffB)
