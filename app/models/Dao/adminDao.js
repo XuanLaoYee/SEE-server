@@ -255,8 +255,8 @@ module.exports = {
         }
         var theAccounts = unique(staffIds)
         const sql5 = 'insert into participate values (?,?,0)'
-        for(var i=0;i<theAccounts.length;i++){
-            await db.query(sql5,[theAccounts[0],projectId])
+        for(let i=0;i<theAccounts.length;i++){
+            await db.query(sql5,[theAccounts[i],projectId])
         }
         const sql6 = 'insert into projectName values (?,?)'
         await db.query(sql6,[projectName,projectId])
