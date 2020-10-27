@@ -236,16 +236,18 @@ module.exports = {
         const sql1 = 'select * from task order by id desc '
         const topTask = await db.query(sql1)
         const offset = topTask[0].id;
-        const sql2 = 'insert into tasks values(null,?,?,0)'
+        const sql2 = 'insert into task values(null,?,?,0)'
         const sql3 = 'insert into perform values (?,?,?,null,0)'
-        for(var i=0;i<sorts.length;i++){
+        for(let i=0;i<sorts.length;i++){
             await db.query(sql2,[sorts[i],projectId])
             await db.query(sql3,[staffIds[0],i+1+offset,staffIds[0]])
 
         }
 
         const sql4 = 'insert into sequence values (?,?)'
-        await db.query(sql4,[sources[i],targets[i]])
+        for(let i = 0;i<sources.length;i++){
+            await db.query(sql4,[sources[i]+1+offset,targets[i]+1+offset])
+        }
         var theAccounts = unique(staffIds)
         const sql5 = 'insert into participate values (?,?,0)'
         for(var i=0;i<theAccounts.length;i++){

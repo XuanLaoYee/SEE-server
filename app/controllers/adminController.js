@@ -125,7 +125,6 @@ module.exports = {
             }
             return
         }
-        //TODO
         let sources = []
         let newTargets = []
         for(let i=0;i<targets.length;i++){
