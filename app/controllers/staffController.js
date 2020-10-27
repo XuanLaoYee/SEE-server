@@ -122,6 +122,13 @@ module.exports = {
             return
         }
         let account = ctx.session.user.account;
+        if(otherAccount === account){
+            ctx.body = {
+                code:'000',
+                msg:'不可以将任务转给自己'
+            }
+            return
+        }
         let theTask = await staffDao.checkIsMyAndCanDo(id,account)
         if(theTask===null){
             ctx.body = {
