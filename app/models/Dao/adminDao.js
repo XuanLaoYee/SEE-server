@@ -43,11 +43,11 @@ module.exports = {
         return await db.query(sql, [account, password]);
     },
     changePerformPerson: async (id, account) => {
-        const sql = 'select * from perform where id = ? and transfer = 0';
-        perform1 = await db.query(sql, id);
-        if (perform1.size() !== 0) {
-            const msg1 = 'insert into messagebox(msg,receiver,sender,kind) values ("您的"+?+"号任务已被管理员重新分配给其他人",?,null,1)';
-            await db.query(msg1, [id, perform1[0].account])
+        const sql = 'select * from perform where id = ?';
+        const perform1 = await db.query(sql, id);
+        if (perform1.length !== 0) {
+            const msg1 = 'insert into messagebox values (?,?,null,1)';
+            await db.query(msg1, ["您的"+id+"号任务已被管理员重新分配给其他人", perform1[0].account])
             const sql1 = 'update perform set transfer = 1 where id = ? and transfer = 0';
             await db.query(sql1, id)
             const sql2 = 'select * from task where id = ?';
@@ -64,14 +64,14 @@ module.exports = {
                 }
             }
             if (flag === false) {
-                const sql5 = 'delete * from participate where account = ? and project = ?'
+                const sql5 = 'delete from participate where account = ? and project = ?'
                 await db.query(sql5, [perform1[0].account, projectId])
             }
         }
         const sql6 = 'insert into perform values (?,?,?,null,0)'
         await db.query(sql6, [account, id, account])
-        const msg2 = 'insert into messagebox(msg,receiver,sender,kind) values ("管理员将"+?+"号任务分配给您",?,null,1)'
-        await db.query(msg2, [id, account])
+        const msg2 = 'insert into messagebox values (?,?,null,1)'
+        await db.query(msg2, ["管理员将"+id+"号任务分配给您", account])
         const sql7 = 'select * from task where id = ?'
         const tasks = await db.query(sql7, id);
         const sql8 = 'select * from participate where project = ? and account = ?'
@@ -83,7 +83,7 @@ module.exports = {
     },
     changeOrders: async (sources,targets) => {
         for(var i = 0;i<sources.length;i++){
-            const  sql4 = 'delete * from sequence where thisTask = ?';
+            const  sql4 = 'delete from sequence where thisTask = ?';
             await db.query(sql4,[sources[i]])
         }
         for(var i =0;i<sources;i++){

@@ -51,7 +51,7 @@ module.exports = {
         const sql = 'select * from perform where id = ? and transfer = 0'
         const oldStaff = await db.query(sql,[id])
         console.log(oldStaff)
-        if(deadline !== null||deadline !=='null'){
+        if(deadline !== null && deadline !=='null' && deadline !== undefined && deadline !== 0){
             const theTime = timestamps2string(deadline)
             await db.query(msg1,["您好,我已将我的"+id.toString()+"号子任务移交给您,请您在"+theTime+"之前完成,谢谢",account,oldStaff[0].account])
             setTimeGuider(deadline)
