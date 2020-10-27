@@ -186,6 +186,7 @@ insert into sequence values(10,13);
 insert into sequence values(10,12);
 insert into sequence values(14,11);
 insert into sequence values(12,15);
+insert into sequence values(13,null);
 insert into sequence values(14,17);
 insert into sequence values(11,16);
 insert into sequence values(15,16);

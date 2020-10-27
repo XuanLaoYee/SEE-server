@@ -22,7 +22,11 @@ function timestamps2string(v){
     return clock;
 }
 
-
+function now() {
+    nowTime = new Date()
+    // 计算当前时间的秒数
+    return nowTime.getTime();
+}
 
 module.exports = {
     login:async (account,password)=>{
@@ -43,22 +47,26 @@ module.exports = {
         }
     },
     transforTheTask: async (id, account, deadline) => {
-        const sql = 'select * from perform where id = ? and transfer = 0'
-        const sql1 = 'update perform set executor = ? where id = ? and transfer = 0'
-        const sql2 = 'update perform set deadline =? where id = ? and transfer = 0'
-        const sql3 = 'update perform set transfer = 1 where id = ? and transfer = 0'
-        await db.query(sql1, [account, id])
-        await db.query(sql2, [deadline, id])
-        await db.query(sql3,[id])
-        const oldStaff = await db.query(sql,[id])
         const msg1 = 'insert into messagebox values (?,?,?,2)'
-        if(deadline !== null){
+        const sql = 'select * from perform where id = ? and transfer = 0'
+        const oldStaff = await db.query(sql,[id])
+        console.log(oldStaff)
+        if(deadline !== null||deadline !=='null'){
             const theTime = timestamps2string(deadline)
             await db.query(msg1,["您好,我已将我的"+id.toString()+"号子任务移交给您,请您在"+theTime+"之前完成,谢谢",account,oldStaff[0].account])
             setTimeGuider(deadline)
         }else{
             await db.query(msg1,["您好,我已将我的"+id.toString()+"号子任务移交给您,谢谢",account,oldStaff[0].account])
         }
+        const sql1 = 'update perform set executor = ? where id = ? and transfer = 0'
+        const sql2 = 'update perform set deadline =? where id = ? and transfer = 0'
+        const sql3 = 'update perform set transfer = 1 where id = ? and transfer = 0'
+        await db.query(sql1, [account, id])
+        await db.query(sql2, [deadline, id])
+        await db.query(sql3,[id])
+
+
+
         async function recyleTaskByTime(time){
             // console.log(time);
             const sql = 'select * from perform where deadline <= ? and transfer = 1';
