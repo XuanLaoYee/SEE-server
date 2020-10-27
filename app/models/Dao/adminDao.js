@@ -277,5 +277,12 @@ module.exports = {
         const sql = 'select * from perform where id = ?'
         return await db.query(sql,id)
     },
+    findAllEdgeByOne:async (id)=>{
+        const sql =  'select * from task where id = ?';
+        const theTask = await db.query(sql,id)
+        const project = theTask[0].project;
+        const sql2 = 'select * from task where project = ?'
+        return await db.query(sql2,project);
 
+    }
 }

@@ -8,7 +8,7 @@ function isCycle(sources, targets) { //判断DAG是否成环,成环是false
         if(targets[i] === null){
             sources.splice(i,1)
             targets.splice(i,1)
-            i--;
+            i=0;
         }
     }
     let edges = []
@@ -137,6 +137,7 @@ module.exports = {
                 code: '000',
                 msg: '您的分配的任务顺序产生闭环，无法创建'
             }
+            return
         }
         await adminDao.createProject(projectName, sorts, accounts, sources, targets);
         ctx.body = {
@@ -171,6 +172,7 @@ module.exports = {
                 if (participates[i].project !== tempProject) {
                     accounts.push(accountArray);
                     accountArray = [];
+                    accountArray.push(participates[i].account)
                     tempProject = participates[i].project;
                     projects.push(tempProject);
                     dones.push(participates[i].done);
@@ -202,6 +204,36 @@ module.exports = {
         let {sources, targets} = ctx.request.body;
         console.log(sources)
         console.log(targets)
+        let oldSources = []
+        let oldTargets = []
+        const tasks = await adminDao.findAllEdgeByOne(sources[0])
+        for(let i = 0;i<tasks.length;i++){
+            const theTasks = await adminDao.getTheSequence(tasks[i].id)
+            for(let j = 0;j<theTasks.length;j++){
+                oldSources.push(tasks[i].id)
+                oldTargets.push(theTasks[j].nextTask)
+            }
+        }
+
+        for(let i = 0;i<oldSources.length;i++){
+            if(oldSources[i] === sources[0]){
+                oldSources.splice(i,1)
+                oldTargets.splice(i,1)
+                i = 0;
+            }
+        }
+        for(let i =0;i<targets.length;i++){
+            oldSources.push(sources[0])
+            oldTargets.push(targets[i])
+        }
+
+        if(!isCycle(oldSources,oldTargets)){
+            ctx.body = {
+                code: '000',
+                msg: '您的分配的任务顺序产生闭环，无法修改顺序'
+            }
+            return
+        }
         await adminDao.changeOrders(sources, targets)
         ctx.body = {
             code: '001',
