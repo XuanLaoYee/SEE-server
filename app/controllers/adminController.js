@@ -4,6 +4,13 @@ const userDao = require("../models/Dao/userDao")
 
 
 function isCycle(sources, targets) { //判断DAG是否成环,成环是false
+    for(let i=0;i<sources.length;i++){
+        if(targets[i] === null){
+            sources.splice(i,1)
+            targets.splice(i,1)
+            i--;
+        }
+    }
     let edges = []
     for (var i = 0; i < sources.length; i++) {
         var temp = {};
@@ -226,41 +233,58 @@ module.exports = {
         }
         let {project} = ctx.request.body;
         const theProjects = await adminDao.checkTheTaskByProject(project)
-        sources = []
-        sourcesSorts = []
-        targetSorts = []
-        sourcesDones = []
-        targetsDones = []
-        targets = []
+        let sources = []
+        let sourcesSorts = []
+        let targetSorts = []
+        let sourcesDones = []
+        let targetsDones = []
+        let targets = []
 
         for (var i = 0; i < theProjects.length; i++) {
             const oneSequence = await adminDao.getTheSequence(theProjects[i].id);
             // console.log(oneSequence)
+            let sourcesDone = await ItemDao.getIsDone(oneSequence[0].thisTask);
+            sourcesDones.push(sourcesDone);
+            let sourcesSort = await ItemDao.getTheSort(oneSequence[0].thisTask);
+            sources.push(oneSequence[0].thisTask)
+            sourcesSorts.push(sourcesSort)
+
+            let thetargetsDones = []
+            let thetargetsSorts = []
+            let thetargets = []
             for(let j=0;j<oneSequence.length;j++){
-                let sourcesDone = await ItemDao.getIsDone(oneSequence[j].thisTask);
-                let sourcesSort = await ItemDao.getTheSort(oneSequence[j].thisTask);
-                sources.push(oneSequence[j].thisTask)
-                sourcesSorts.push(sourcesSort)
-                sourcesDones.push(sourcesDone)
                 if(oneSequence[j].nextTask === null){
-                    targetsDones.push(null)
-                    targetSorts.push(null)
-                    targets.push(null)
+                    break
                 }else {
                     let targetsDone = await ItemDao.getIsDone(oneSequence[j].nextTask);
                     let targetsSort = await ItemDao.getTheSort(oneSequence[j].nextTask);
-                    targets.push(oneSequence[j].nextTask)
-                    targetSorts.push(targetsSort)
-                    targetsDones.push(targetsDone)
+                    thetargets.push(oneSequence[j].nextTask)
+                    thetargetsSorts.push(targetsSort)
+                    thetargetsDones.push(targetsDone)
                 }
             }
+            targetSorts.push(thetargetsSorts);
+            targetsDones.push(thetargetsDones);
+            targets.push(thetargets);
         }
+        let accounts = []
+        let userNames = []
+        for(let i=0;i<sources.length;i++){
+            const theAccount = await adminDao.findAccountByTask(sources[i])
+            accounts.push(theAccount[0].account)
+            const theName = await userDao.checkMyName(theAccount[0].account)
+            userNames.push(theName[0].userName)
+        }
+
+
         const projectName = await ItemDao.getTheProjectName(theProjects[0].project)
-        theProjectName = projectName[0].name
+        let theProjectName = projectName[0].name
         ctx.body = {
             code: '001',
             sources,
             targets,
+            accounts,
+            userNames,
             sourcesSorts,
             targetSorts,
             sourcesDones,

@@ -21,5 +21,9 @@ module.exports = {
     checkAllStaff:async ()=>{
         const sql = 'select * from staff'
         return await db.query(sql)
+    },
+    checkMyName:async (account)=>{
+        const sql = 'select * from staff where account = ?'
+        return await db.query(sql,account)
     }
 }

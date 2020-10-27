@@ -268,6 +268,9 @@ module.exports = {
         const sql = 'select * from task where project = ?';
         return await db.query(sql,project)
     },
-
+    findAccountByTask: async (id) =>{
+        const sql = 'select * from perform where id = ?'
+        return await db.query(sql,id)
+    },
 
 }
