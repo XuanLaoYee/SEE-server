@@ -6,7 +6,7 @@ module.exports = {
         return await db.query(sql,account)
     },
     deleteMessage:async (account) =>{
-        const sql = 'select * from messagebox where receiver = ?'
+        const sql = 'delete from messagebox where receiver = ?'
         return await db.query(sql,account)
     }
 }
