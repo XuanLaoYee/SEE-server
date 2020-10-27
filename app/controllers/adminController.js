@@ -116,7 +116,7 @@ module.exports = {
         }
     },
     createProject: async ctx => {
-        let {projectName, sorts, accounts, sources, targets} = ctx.request.body;
+        let {projectName, sorts, accounts, targets} = ctx.request.body;
         let userKind = ctx.session.user.userKind
         if (userKind !== "admin") {
             ctx.body = {
@@ -125,13 +125,27 @@ module.exports = {
             }
             return
         }
-        if (!isCycle(sources, targets)) {
+        //TODO
+        let sources = []
+        let newTargets = []
+        for(let i=0;i<targets.length;i++){
+            if(targets[i].length === 0){
+                sources.push(i)
+                newTargets.push(null)
+            }else{
+                for(let j=0;j<targets[i].length;j++){
+                    sources.push(i);
+                    newTargets.push(targets[i][j])
+                }
+            }
+        }
+        if (!isCycle(sources, newTargets)) {
             ctx.body = {
                 code: '000',
                 msg: '您的分配的任务顺序产生闭环，无法创建'
             }
         }
-        await adminDao.createProject(projectName, sorts, accounts, sources, targets);
+        await adminDao.createProject(projectName, sorts, accounts, sources, newTargets);
         ctx.body = {
             code: '001',
             msg: '创建成功'
