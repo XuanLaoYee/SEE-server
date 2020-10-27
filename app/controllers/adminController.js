@@ -161,9 +161,9 @@ module.exports = {
         dones = []
         if (participates.length !== 0) {
             let tempProject = participates[0].project;
-            projects.push(participates[0].project)
+            projects.push(tempProject)
             dones.push(participates[0].done)
-            const projectName = await ItemDao.getTheProjectName(participates[0].project)
+            const projectName = await ItemDao.getTheProjectName(tempProject)
             projectNames.push(projectName[0].name);
             accountArray = []
             accountArray.push(participates[0].account)

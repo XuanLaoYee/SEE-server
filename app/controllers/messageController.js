@@ -15,7 +15,7 @@ module.exports = {
                 status:0
             }
         }else{
-            for(var i =0;i<messages.size;i++){
+            for(var i =0;i<messages.length;i++){
                 sender.push(messages[i].theSender)
                 msg.push(messages[i].msg)
                 kind.push(messages[i].theKind)

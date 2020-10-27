@@ -56,10 +56,10 @@ module.exports = {
             const sql3 = 'select * from task where project = ?';
             const tasks = await db.query(sql3, projectId);
             var flag = false;
-            for (var i = 0; i < tasks.size; i++) {
+            for (var i = 0; i < tasks.length; i++) {
                 const sql4 = 'select * from perform where id = ? and transfer = 0';
                 var a = await db.query(sql4, tasks[i].id)
-                if (a.size() !== 0) {
+                if (a.length !== 0) {
                     flag = true;
                 }
             }
@@ -76,7 +76,7 @@ module.exports = {
         const tasks = await db.query(sql7, id);
         const sql8 = 'select * from participate where project = ? and account = ?'
         const b = await db.query(sql8, [tasks[0].project, account])
-        if (b.size !== 0) {
+        if (b.length !== 0) {
             sql9 = 'insert into participate values (?,?,0)'
             await db.query(sql9, [account, tasks[0].project])
         }
@@ -123,7 +123,7 @@ module.exports = {
         const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
         var projectId = 0
-        if (tasks.size === 0) {
+        if (tasks.length === 0) {
             projectId = 0;
         } else {
             projectId = tasks[0].project + 1;
@@ -166,7 +166,7 @@ module.exports = {
             }
             const sql8 = 'select * from participate where project = ? and account = ?'
             const b = await db.query(sql8, [projectId, accountTemp])
-            if (b.size === 0) {
+            if (b.length === 0) {
                 sql9 = 'insert into participate values (?,?,0)'
                 await db.query(sql9, [accountTemp, projectId])
             }
@@ -233,7 +233,7 @@ module.exports = {
         const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
         var projectId = 0
-        if (tasks.size === 0) {
+        if (tasks.length === 0) {
             projectId = 0;
         } else {
             projectId = tasks[0].project + 1;

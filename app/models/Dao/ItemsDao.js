@@ -28,7 +28,7 @@ module.exports = {
         const projectId = await db.query(sql1, id);
         const sql2 = 'select * from participate where account = ? and project = ?';
         const participate = await db.query(sql2, [account, projectId[0].project]);
-        if (participate.size() !== 0) {
+        if (participate.length !== 0) {
             const sql3 = 'insert into participate value (?,?,0)';
             await db.query(sql3, [account, projectId[0].project]);
         }
