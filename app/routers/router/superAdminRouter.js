@@ -17,6 +17,6 @@ superAdminRouter
     .post('/api/superAdmin/stopProject',adminController.stopProject)
     .post('/api/superAdmin/restartProject',adminController.restartProject)
     .post('/api/superAdmin/deleteUser',superAdminController.deleteUser)
-    .post('/api/superAdmin/changeProjectName',)
+    .post('/api/superAdmin/changeProjectName',superAdminController.changeProjectName)
 
 module.exports = superAdminRouter
