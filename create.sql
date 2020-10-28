@@ -234,4 +234,7 @@ insert into sequence values(37,38);
 insert into sequence values(38,39);
 insert into sequence values(39,null);
 
+insert into charge values ('admin',1);
+insert into charge values ('admin',3);
+
 
