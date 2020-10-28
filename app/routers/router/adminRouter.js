@@ -4,6 +4,7 @@
 
 const Router = require('koa-router');
 const adminController = require('../../controllers/adminController');
+const itemController = require('../../controllers/ItemsController');
 
 let adminRouter = new Router();
 
@@ -19,6 +20,7 @@ adminRouter
     .post('/api/checkStaffB',adminController.checkStaffB)
     .post('/api/checkStaffC',adminController.checkStaffC)
     .post('/api/checkAllStaff',adminController.checkAllStaff)
+    .post('/api/checkSchedule',adminController.checkSchedule)
 
 
 

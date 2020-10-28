@@ -104,5 +104,19 @@ module.exports = {
                 console.log(err)
             })
     },
+    checkSchedule:async (project)=>{
+        const sql = 'select * from task where project = ?'
+        const tasks = await db.query(sql,project);
+        let unDos = 0
+        let Dones = 0
+        for(let i=0;i<tasks.length;i++){
+            if(tasks[i].done === 0 || tasks[i].done === 2){
+                unDos ++;
+            }else{
+                Dones ++;
+            }
+        }
+        return Dones/(Dones+unDos)*100
+    }
 
 }

@@ -52,7 +52,7 @@ module.exports = {
             }
         }
         const sql3 = 'select * from staff where sort = ? and account <> ?'
-        const otherStaffs = await db.query(sql3,sort)
+        const otherStaffs = await db.query(sql3,[sort,account])
         if(otherStaffs.length === 0){
             return false;
         }

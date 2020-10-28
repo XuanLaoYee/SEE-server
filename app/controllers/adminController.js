@@ -375,4 +375,12 @@ module.exports = {
             sorts
         }
     },
+    checkSchedule:async ctx=>{
+        let {project} = ctx.request.body;
+        const schedule = await ItemDao.checkSchedule(project)
+        ctx.body = {
+            code:'001',
+            schedule
+        }
+    }
 }
