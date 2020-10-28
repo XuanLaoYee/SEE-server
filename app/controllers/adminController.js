@@ -135,7 +135,7 @@ module.exports = {
         let account = ctx.session.user.account
         const participates = await adminDao.findAllMyProject(account)
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "admin" && userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
@@ -184,7 +184,7 @@ module.exports = {
     },
     changeOrders: async ctx => {
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "admin" && userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
@@ -233,7 +233,7 @@ module.exports = {
     changePerformPerson: async ctx => {
         let {id, account} = ctx.request.body;
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "admin" && userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
@@ -248,7 +248,7 @@ module.exports = {
     },
     checkAllProjects: async ctx => {
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "admin" && userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'

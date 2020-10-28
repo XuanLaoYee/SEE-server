@@ -231,7 +231,6 @@ module.exports = {
             deadlines,
             transfers,
             dones,
-            canDos
         }
     },
     checkSameStaff:async ctx => {
@@ -288,14 +287,14 @@ module.exports = {
     },
     register: async ctx=>{
         let {account,userName,password,sort} = ctx.request.body;
-        if(!userDao.checkAccountIsRepeat(account)){
+        if(!await userDao.checkAccountIsRepeat(account)){
             ctx.body = {
                 code:'000',
                 msg:'帐号重复'
             }
             return
         }
-        if(!userDao.checkUserNameIsRepeat(userName)){
+        if(!await userDao.checkUserNameIsRepeat(userName)){
             ctx.body = {
                 code:'000',
                 msg:'用户名重复'

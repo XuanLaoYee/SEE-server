@@ -19,10 +19,11 @@ module.exports = {
         await db.query(sql,[sort,account])
     },
     arrangeProjectPrincipal:async (account,project) =>{
+        const sql1 = 'delete from charge where project = ?'
+        await db.query(sql1,[project])
         const sql = 'insert into charge values (?,?)'
         await db.query(sql,[account,project])
-        const sql1 = 'delete from charge where account = ? and project = ?'
-        await db.query(sql1,[account,project])
+
     },
     recycleProjectPrincipal:async (account,project) =>{
         const sql = 'delete from charge where account = ? and project = ?'
@@ -80,6 +81,44 @@ module.exports = {
     getPariticpate:async (project)=>{
         const sql = 'select * from participate where project = ?'
         return await db.query(sql,[project])
+    },
+    deleteAdmin:async (account) =>{
+        const sql = 'delete from admin where account = ?'
+        await db.query(sql,account)
+    },
+    deleteStaff:async (account) =>{
+        const sql = 'delete from staff where account = ?'
+        await db.query(sql,account)
+    },
+    checkInStaff:async (account) =>{
+        const sql = 'select * from staff where account = ?'
+        return await db.query(sql,account)
+    },
+    checkInAdmin:async (account) =>{
+        const sql = 'select * from admin where account = ?'
+        return await db.query(sql,account)
+    },
+    transferProject:async (account) =>{
+        const sql = 'select * from charge where account = ?'
+        const sql1 = 'select * from admin '
+        const admins = await db.query(sql1)
+        if(admins.length === 0){
+            return false
+        }
+        const projects = await db.query(sql,account)
+        const sql2 = 'delete from admin where account = ?'
+        const sql3 = 'delete from charge where account = ?'
+        await db.query(sql2,account)
+        await db.query(sql3,account)
+        const sql4 = 'select * from admin'
+        const newAdmins = await db.query(sql4)
+        const sql5 = 'insert into charge values (?,?)'
+        const msg = 'insert into messagebox values (?,?,null,1)'
+        for(let i=0;i<projects.length;i++){
+            let cur = Math.ceil(Math.random()*newAdmins.length -1);
+            await db.query(sql5,[newAdmins[cur].account,projects[i].project])
+            await db.query(msg,["超级管理员已将"+projects[i].project.toString()+"项目移交给您，注意查看",newAdmins[cur].account])
+        }
+        return true;
     }
-
 }

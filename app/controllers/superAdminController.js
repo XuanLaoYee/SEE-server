@@ -140,5 +140,41 @@ module.exports = {
             userNames,
             dones
         }
+    },
+    deleteUser:async ctx=>{
+        let {account} = ctx.request.body;
+        const staffs = await superAdminDao.checkInAdmin(account)
+        const admins = await superAdminDao.checkInAdmin(account)
+        if(staffs.length !== 0){
+            if(! await superAdminDao.transferTask(account)){
+                ctx.body = {
+                    code:'000',
+                    msg:'该员工所执行的任务无替代人员，暂时不可删除'
+                }
+            }else{
+                await superAdminDao.deleteStaff(account)
+                ctx.body = {
+                    code:'001',
+                    msg:'删除成功'
+                }
+            }
+        }else if(admins.length !== 0){
+            if(! await  superAdminDao.transferProject){
+                ctx.body = {
+                    code:'000',
+                    msg:'本公司已无替补项目管理员，暂不可执行删除操作'
+                }
+            }else{
+                ctx.body = {
+                    code:'001',
+                    msg:'删除成功'
+                }
+            }
+        }else{
+            ctx.body = {
+                code:'000',
+                msg:'该人员为超级管理员，不可删除'
+            }
+        }
     }
 }
