@@ -92,14 +92,6 @@ module.exports = {
     },
     stopProject: async ctx => {
         let {project} = ctx.request.body;
-        let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
-            ctx.body = {
-                code: '403',
-                msg: '您无权操作'
-            }
-            return
-        }
         await adminDao.terminationProject(project)
         ctx.body = {
             code: '001',
@@ -108,14 +100,6 @@ module.exports = {
     },
     restartProject: async ctx => {
         let {project} = ctx.request.body;
-        let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
-            ctx.body = {
-                code: '403',
-                msg: '您无权操作'
-            }
-            return
-        }
         await adminDao.restartProject(project);
         ctx.body = {
             code: '001',
