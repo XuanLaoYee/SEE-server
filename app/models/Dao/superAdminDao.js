@@ -70,7 +70,11 @@ module.exports = {
         }
 
         return true;
-    }
+    },
+    Login: async (account, password) => {
+        const sql = 'select * from superadmin where account = ? and password = ?';
+        return await db.query(sql, [account, password]);
+    },
 
 
 }

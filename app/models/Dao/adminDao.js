@@ -293,5 +293,9 @@ module.exports = {
         const sql2 = 'select * from task where project = ?'
         return await db.query(sql2,project);
 
+    },
+    findAllMyProject:async (account)=>{
+        const sql = 'select * from participate where account = ? '
+        return await db.query(sql)
     }
 }

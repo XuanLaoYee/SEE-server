@@ -148,7 +148,8 @@ module.exports = {
         }
     },
     findParticipateProject: async ctx => {
-        const participates = await adminDao.findParticipateProject()
+        let {account} = ctx.request.body
+        const participates = await adminDao.findAllMyProject(account)
         let userKind = ctx.session.user.userKind
         if (userKind !== "admin") {
             ctx.body = {

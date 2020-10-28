@@ -2,6 +2,7 @@ const staffDao = require('../models/Dao/staffDao')
 const adminDao = require('../models/Dao/adminDao')
 const userDao = require('../models/Dao/userDao')
 const ItemDao = require('../models/Dao/ItemsDao')
+const superAdminDao = require('../models/Dao/superAdminDao')
 
 module.exports = {
     Login:async ctx => {
@@ -36,9 +37,25 @@ module.exports = {
                     msg:'登录成功'
                 };
             }else{
-                ctx.body = {
-                    code:'000',
-                    msg:'登录失败，请检查帐号或密码是否输入正确'
+                let user = await superAdminDao.Login(account,password)
+                if(user.length!==0){
+                    User = {
+                        account:account,
+                        userKind:'superAdmin',
+                    };
+                    ctx.session.user = User;
+                    ctx.body = {
+                        code:'001',
+                        account:account,
+                        userName:user[0].userName,
+                        userKind:'superAdmin',
+                        msg:'登录成功'
+                    };
+                }else{
+                    ctx.body = {
+                        code:'000',
+                        msg:'登录失败，请检查帐号或密码是否输入正确'
+                    }
                 }
             }
         }
