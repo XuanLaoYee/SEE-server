@@ -176,5 +176,13 @@ module.exports = {
                 msg:'该人员为超级管理员，不可删除'
             }
         }
+    },
+    changeProjectName:async ctx=>{
+        let{projectName,project} = ctx.request.body;
+        await superAdminDao.changeProjectName(projectName,project)
+        ctx.body = {
+            code:'001',
+            msg:'修改成功'
+        }
     }
 }

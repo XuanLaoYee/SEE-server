@@ -120,5 +120,9 @@ module.exports = {
             await db.query(msg,["超级管理员已将"+projects[i].project.toString()+"项目移交给您，注意查看",newAdmins[cur].account])
         }
         return true;
+    },
+    changeProjectName:async (name,project)=>{
+        const sql = 'update projectname set name = ? where project = ?'
+        await db.query(sql,[name,project])
     }
 }
