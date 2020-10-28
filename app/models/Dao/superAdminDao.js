@@ -21,6 +21,8 @@ module.exports = {
     arrangeProjectPrincipal:async (account,project) =>{
         const sql = 'insert into charge values (?,?)'
         await db.query(sql,[account,project])
+        const sql1 = 'delete from charge where account = ? and project = ?'
+        await db.query(sql1,[account,project])
     },
     recycleProjectPrincipal:async (account,project) =>{
         const sql = 'delete from charge where account = ? and project = ?'
