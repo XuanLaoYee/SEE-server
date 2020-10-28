@@ -228,9 +228,9 @@ module.exports = {
 
     },
     createProject:async (projectName, sorts, accounts, sources, targets,adminAccount)=>{
-        for(var i = 0;i<staffIds.length;i++){
+        for(var i = 0;i<accounts.length;i++){
             const msg = 'insert into messagebox values ("管理员开启了新的项目，请查看任务",?,null,0)'
-            await db.query(msg,staffIds[i]);
+            await db.query(msg,accounts[i]);
         }
         const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
@@ -247,7 +247,7 @@ module.exports = {
         const sql3 = 'insert into perform values (?,?,?,null,0)'
         for(let i=0;i<sorts.length;i++){
             await db.query(sql2,[sorts[i],projectId])
-            await db.query(sql3,[staffIds[0],i+1+offset,staffIds[0]])
+            await db.query(sql3,[accounts[0],i+1+offset,accounts[0]])
 
         }
 
@@ -260,7 +260,7 @@ module.exports = {
                 await db.query(sql4,[sources[i]+offset,targets[i]+offset])
             }
         }
-        var theAccounts = unique(staffIds)
+        var theAccounts = unique(accounts)
         const sql5 = 'insert into participate values (?,?,0)'
         for(let i=0;i<theAccounts.length;i++){
             await db.query(sql5,[theAccounts[i],projectId])
