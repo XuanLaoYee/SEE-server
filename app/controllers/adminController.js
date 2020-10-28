@@ -76,7 +76,7 @@ module.exports = {
     startProject: async ctx => {
         let {nums, projectName,adminAccount} = ctx.request.body;
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
@@ -148,7 +148,7 @@ module.exports = {
         }
     },
     findParticipateProject: async ctx => {
-        let {account} = ctx.request.body
+        let account = ctx.session.user.account
         const participates = await adminDao.findAllMyProject(account)
         let userKind = ctx.session.user.userKind
         if (userKind !== "admin") {
@@ -165,7 +165,9 @@ module.exports = {
         if (participates.length !== 0) {
             let tempProject = participates[0].project;
             projects.push(tempProject)
-            dones.push(participates[0].done)
+            // dones.push(participates[0].done)
+            const tempParticipates = await adminDao.findTheProjectDone(tempProject);
+            dones.push(tempParticipates[0].done)
             const projectName = await ItemDao.getTheProjectName(tempProject)
             projectNames.push(projectName[0].name);
             accountArray = []
@@ -178,7 +180,8 @@ module.exports = {
                     accountArray.push(participates[i].account)
                     tempProject = participates[i].project;
                     projects.push(tempProject);
-                    dones.push(participates[i].done);
+                    const tempParticipates = await adminDao.findTheProjectDone(tempProject);
+                    dones.push(tempParticipates[0].done)
                     const projectName = await ItemDao.getTheProjectName(tempProject)
                     projectNames.push(projectName[0].name);
                 } else {

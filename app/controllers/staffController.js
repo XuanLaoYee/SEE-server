@@ -80,6 +80,7 @@ module.exports = {
     },
     checkMyProject: async ctx=>{
         let account = ctx.session.user.account
+        // console.log(account)
         const participate = await staffDao.findParticipateProject(account)
         var projects = []
         var projectNames = []
