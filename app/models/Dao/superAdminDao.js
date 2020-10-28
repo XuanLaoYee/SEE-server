@@ -35,7 +35,7 @@ module.exports = {
     },
     getAdminName:async (account)=>{
         const sql = 'select * from admin where account = ?'
-        return await db.query(sql)
+        return await db.query(sql,account)
     },
     transferTask:async (account)=>{
         const sql = 'select * from staff where account = ?'
@@ -75,6 +75,9 @@ module.exports = {
         const sql = 'select * from superadmin where account = ? and password = ?';
         return await db.query(sql, [account, password]);
     },
-
+    getPariticpate:async (project)=>{
+        const sql = 'select * from participate where project = ?'
+        return await db.query(sql,[project])
+    }
 
 }

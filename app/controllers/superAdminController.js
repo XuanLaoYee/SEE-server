@@ -121,6 +121,7 @@ module.exports = {
         let projectNames = []
         let accounts = []
         let userNames = []
+        let dones = []
         for(let i =0;i<charges.length;i++){
             const theProject = await itemDao.getTheProjectName(charges[i].project)
             const theAdmin = await superAdminDao.getAdminName(charges[i].account)
@@ -128,13 +129,16 @@ module.exports = {
             projects.push(charges[i].project)
             accounts.push(charges[i].account)
             userNames.push(theAdmin[0].userName)
+            const theDone = await superAdminDao.getPariticpate(charges[i].project)
+            dones.push(theDone[0].done)
         }
         ctx.body = {
             code:'001',
             projects,
             projectNames,
             accounts,
-            userNames
+            userNames,
+            dones
         }
     }
 }
