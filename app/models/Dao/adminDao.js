@@ -119,7 +119,7 @@ module.exports = {
         const sql = 'select * from sequence where thisTask = ?'
         return await db.query(sql,id)
     },
-    startNewProject: async (subNums,projectName) => {
+    startNewProject: async (subNums,projectName,adminAccount) => {
         const sql = 'select * from task order by project desc'
         const tasks = await db.query(sql)
         var projectId = 0
@@ -202,6 +202,8 @@ module.exports = {
                 await db.query(sql12,projects[i].id)
             }
         }
+        const sql13 = 'insert into charge values (?,?)'
+        await db.query(sql13,[adminAccount,projectId])
         return projectId
     },
     restartProject: async (projectId) => {
@@ -225,7 +227,7 @@ module.exports = {
 
 
     },
-    createProject:async (projectName,sorts,staffIds,sources,targets)=>{
+    createProject:async (projectName, sorts, accounts, sources, targets,adminAccount)=>{
         for(var i = 0;i<staffIds.length;i++){
             const msg = 'insert into messagebox values ("管理员开启了新的项目，请查看任务",?,null,0)'
             await db.query(msg,staffIds[i]);
@@ -265,6 +267,8 @@ module.exports = {
         }
         const sql6 = 'insert into projectName values (?,?)'
         await db.query(sql6,[projectName,projectId])
+        const sql8 = 'insert into charge values (?,?)'
+        await db.query(sql8,[adminAccount,projectId])
     },
     findParticipateProject: async () => {
         const sql = 'select * from participate order by project asc '

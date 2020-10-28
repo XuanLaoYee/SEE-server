@@ -8,7 +8,7 @@ const adminController = require('../../controllers/adminController');
 let adminRouter = new Router();
 
 adminRouter
-    .post('/api/admin/newProject',adminController.startProject)
+
     .post('/api/admin/stopProject',adminController.stopProject)
     .post('/api/admin/restartProject',adminController.restartProject)
     .post('/api/admin/allProjects',adminController.findParticipateProject)
@@ -19,7 +19,7 @@ adminRouter
     .post('/api/checkStaffB',adminController.checkStaffB)
     .post('/api/checkStaffC',adminController.checkStaffC)
     .post('/api/checkAllStaff',adminController.checkAllStaff)
-    .post('/api/admin/createProject',adminController.createProject)
+
 
 
 module.exports = adminRouter;

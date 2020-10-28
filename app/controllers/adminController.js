@@ -74,7 +74,7 @@ function isCycle(sources, targets) { //判断DAG是否成环,成环是false
 
 module.exports = {
     startProject: async ctx => {
-        let {nums, projectName} = ctx.request.body;
+        let {nums, projectName,adminAccount} = ctx.request.body;
         let userKind = ctx.session.user.userKind
         if (userKind !== "admin") {
             ctx.body = {
@@ -83,7 +83,7 @@ module.exports = {
             }
             return
         }
-        projectId = await adminDao.startNewProject(nums, projectName)
+        projectId = await adminDao.startNewProject(nums, projectName,adminAccount)
         ctx.body = {
             code: '001',
             projectId,
@@ -123,9 +123,9 @@ module.exports = {
         }
     },
     createProject: async ctx => {
-        let {projectName, sorts, accounts, sources, targets} = ctx.request.body;
+        let {projectName, sorts, accounts, sources, targets, adminAccount} = ctx.request.body;
         let userKind = ctx.session.user.userKind
-        if (userKind !== "admin") {
+        if (userKind !== "superAdmin") {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
@@ -141,7 +141,7 @@ module.exports = {
             }
             return
         }
-        await adminDao.createProject(projectName, sorts, accounts, sources, targets);
+        await adminDao.createProject(projectName, sorts, accounts, sources, targets,adminAccount);
         ctx.body = {
             code: '001',
             msg: '创建成功'

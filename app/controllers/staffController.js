@@ -267,6 +267,28 @@ module.exports = {
             code:'001',
             account
         }
+    },
+    register: async ctx=>{
+        let {account,userName,password,sort} = ctx.request.body;
+        if(!userDao.checkAccountIsRepeat(account)){
+            ctx.body = {
+                code:'000',
+                msg:'帐号重复'
+            }
+            return
+        }
+        if(!userDao.checkUserNameIsRepeat(userName)){
+            ctx.body = {
+                code:'000',
+                msg:'用户名重复'
+            }
+            return
+        }
+        await userDao.register(account,userName,password,sort);
+        ctx.body = {
+            code:'001',
+            msg:'注册成功'
+        }
     }
 
 
