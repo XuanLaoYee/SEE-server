@@ -55,6 +55,17 @@ create table projectName(
     project int not null
 );
 
+create table superAdmin(
+    account char(40) not null,
+    password char(40) not null,
+    userName char(40)
+);
+
+create table charge(
+    account char(40) not null ,
+    project int not null
+);
+
 
 insert into staff values ('1','1','A','大娃');
 insert into staff values ('2','2','A','二娃');
@@ -65,6 +76,8 @@ insert into staff values ('6','6','C','六娃');
 
 insert into admin values ('admin','admin','老逼登');
 insert into admin values ('sxc','111111','孙狗');
+
+insert into superAdmin values ('super','111111','波多野结衣');
 
 insert into task values (null,'A',1,0);
 insert into perform values ('1',1,'1',null,0);
@@ -220,3 +233,5 @@ insert into sequence values(36,37);
 insert into sequence values(37,38);
 insert into sequence values(38,39);
 insert into sequence values(39,null);
+
+
