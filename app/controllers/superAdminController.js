@@ -94,7 +94,7 @@ module.exports = {
             }
             return
         }
-        if(!superAdminDao.transferTask(account)){
+        if(!await superAdminDao.transferTask(account)){
             ctx.body = {
                 code:'000',
                 msg:'该员工所执行的任务无替代人员，不可更改人员属性'
