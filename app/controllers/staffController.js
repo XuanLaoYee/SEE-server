@@ -274,6 +274,7 @@ module.exports = {
         let deadlines = []
         let transfers = []
         let dones = []
+        let accounts = []
         for(var i=0;i<tasks.length;i++){
             ids.push(tasks[i].id)
             const done = await ItemDao.getIsDone(tasks[i].id)
@@ -281,10 +282,12 @@ module.exports = {
             executors.push(tasks[i].executor)
             deadlines.push(tasks[i].deadline)
             transfers.push(tasks[i].transfer)
+            accounts.push(tasks[i].account)
         }
         ctx.body = {
             code:'001',
             ids,
+            accounts,
             executors,
             deadlines,
             transfers,
