@@ -143,7 +143,7 @@ module.exports = {
     },
     deleteUser:async ctx=>{
         let {account} = ctx.request.body;
-        const staffs = await superAdminDao.checkInAdmin(account)
+        const staffs = await superAdminDao.checkInStaff(account)
         const admins = await superAdminDao.checkInAdmin(account)
         if(staffs.length !== 0){
             if(! await superAdminDao.transferTask(account)){

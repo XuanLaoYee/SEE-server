@@ -87,6 +87,10 @@ module.exports = {
         await db.query(sql,account)
     },
     deleteStaff:async (account) =>{
+        const sql1 = 'delete from perform where account = ?'
+        await db.query(sql1,account)
+        const sql2 = 'delete from participate where account = ?'
+        await db.query(sql2,account)
         const sql = 'delete from staff where account = ?'
         await db.query(sql,account)
     },
