@@ -45,6 +45,16 @@ module.exports = {
             const sql3 = 'update participate set done = 1 where project = ?'
             await db.query(sql3,project)
         }
+        const msg = 'insert into messagebox values (?,?,null,0)'
+        const sql4 = 'select * from sequence where thisTask = ?'
+        const nextTasks = await db.query(sql4,id)
+        for(let i=0;i<nextTasks.length;i++){
+            const sql5 = 'select * from perform where id = ?'
+            const peoples = await db.query(sql5,nextTasks[i].nextTask)
+            for(let j=0;j<peoples.length;j++) {
+                await db.query(msg, ["您的" + nextTasks[i].nextTask.toString() + "现在可以开始执行了", peoples[j].executor])
+            }
+        }
     },
     transforTheTask: async (id, account, deadline) => {
         const msg1 = 'insert into messagebox values (?,?,?,2)'

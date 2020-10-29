@@ -175,7 +175,7 @@ module.exports = {
         }
     },
     createProject: async ctx => {
-        let {projectName, sorts, accounts, sources, targets, adminAccount} = ctx.request.body;
+        const {projectName, sorts, accounts, sources, targets, adminAccount} = ctx.request.body;
         let userKind = ctx.session.user.userKind
         if (userKind !== "superAdmin") {
             ctx.body = {

@@ -248,7 +248,7 @@ module.exports = {
         const sql3 = 'insert into perform values (?,?,?,null,0)'
         for(let i=0;i<sorts.length;i++){
             await db.query(sql2,[sorts[i],projectId])
-            await db.query(sql3,[accounts[0],i+1+offset,accounts[0]])
+            await db.query(sql3,[accounts[i],i+1+offset,accounts[i]])
 
         }
 
