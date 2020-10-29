@@ -125,7 +125,7 @@ module.exports = {
     },
     checkIsMyAndCanDo: async (id,account) =>{
         const sql = 'select * from perform where id = ? and(( account = ? and transfer = 0) or (executor = ? and transfer = 1))';
-        const tasks = await db.query(sql,[id,account])
+        const tasks = await db.query(sql,[id,account,account])
         if(tasks.length === 0){
             return null
         }

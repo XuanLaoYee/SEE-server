@@ -127,7 +127,7 @@ module.exports = {
         const theSort = await userDao.checkMySort(account)
         let date = new Date();
         const theName = await userDao.checkMyName(account)
-        const wantToWriteItem = "('"+theSort+"','"+id.toString()+"','"+theName[0].userName+"','"+account+"','"+date.toLocaleDateString()+"')";
+        const wantToWriteItem = "(('"+theSort+"','"+id.toString()+"','"+theName[0].userName+"','"+account+"','"+date.toLocaleDateString()+"'),)";
         const projectName = await staffDao.checkTheProjectNameById(id)
         addInfo(projectName,wantToWriteItem)
         await staffDao.finishTheTask(id)
