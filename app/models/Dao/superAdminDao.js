@@ -128,5 +128,11 @@ module.exports = {
     changeProjectName:async (name,project)=>{
         const sql = 'update projectname set name = ? where project = ?'
         await db.query(sql,[name,project])
+    },
+    terminateProject:async (project)=>{
+        const sql = 'update task set done = 3 where project = ?';
+        const sql1 = 'update participate set done = 3 where project = ?'
+        await db.query(sql,project)
+        await db.query(sql1,project)
     }
 }

@@ -184,5 +184,13 @@ module.exports = {
             code:'001',
             msg:'修改成功'
         }
+    },
+    terminateProject:async ctx=>{
+        let{project} = ctx.request.body;
+        await superAdminDao.terminateProject(project);
+        ctx.body = {
+            code:'001',
+            msg:"操作成功"
+        }
     }
 }

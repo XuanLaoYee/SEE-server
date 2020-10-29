@@ -134,6 +134,21 @@ module.exports = {
             }
             return
         }
+        if(projectName === ""||projectName.length === 0){
+            ctx.body = {
+                code:'000',
+                msg:"项目名不能为空"
+            }
+            return
+        }
+        const theNames = await adminDao.getAllProjectName(projectName)
+        if(theNames.length !== 0){
+            ctx.body = {
+                code:'000',
+                msg:"项目名重复"
+            }
+            return
+        }
         let projectId = await adminDao.startNewProject(nums, projectName,adminAccount)
         let adminName = await adminDao.getAdminName(adminAccount)
         createProjectDoc(projectName,"ABC",adminName)
@@ -166,6 +181,21 @@ module.exports = {
             ctx.body = {
                 code: '403',
                 msg: '您无权操作'
+            }
+            return
+        }
+        if(projectName === ""||projectName.length === 0){
+            ctx.body = {
+                code:'000',
+                msg:"项目名不能为空"
+            }
+            return
+        }
+        const theNames = await adminDao.getAllProjectName(projectName)
+        if(theNames.length !== 0){
+            ctx.body = {
+                code:'000',
+                msg:"项目名重复"
             }
             return
         }

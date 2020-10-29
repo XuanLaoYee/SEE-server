@@ -48,14 +48,15 @@ module.exports = {
         if (perform1.length !== 0) {
             const msg1 = 'insert into messagebox values (?,?,null,1)';
             await db.query(msg1, ["您的"+id+"号任务已被管理员重新分配给其他人", perform1[0].account])
-            const sql1 = 'update perform set transfer = 1 where id = ? and transfer = 0';
-            await db.query(sql1, id)
+
             const sql2 = 'select * from task where id = ?';
             const task = await db.query(sql2, id);
             projectId = task[0].project;
             const sql3 = 'select * from task where project = ?';
             const tasks = await db.query(sql3, projectId);
             var flag = false;
+            const sql1 = 'delete from perform where id = ?';
+            await db.query(sql1, id)
             for (var i = 0; i < tasks.length; i++) {
                 const sql4 = 'select * from perform where id = ? and transfer = 0';
                 var a = await db.query(sql4, tasks[i].id)
@@ -306,5 +307,9 @@ module.exports = {
         const sql = 'select * from admin where account = ?'
         const theAdmin =  await db.query(sql,account)
         return theAdmin[0].userName;
+    },
+    getAllProjectName:async (name)=>{
+        const sql = 'select * from projectname where name = ?'
+        return await db.query(sql,name)
     }
 }
