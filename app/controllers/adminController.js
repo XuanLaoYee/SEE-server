@@ -2,6 +2,57 @@ const adminDao = require("../models/Dao/adminDao")
 const ItemDao = require("../models/Dao/ItemsDao")
 const userDao = require("../models/Dao/userDao")
 
+function createProjectDoc(title,order,admin){//建立项目和次序和管理员
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\createProjectDoc.py '+ title+' '+order+' '+admin+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function addInfo(title,Info){//添加一大批数据
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\addInfo.py '+ title+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+
+function addOneInfo(title,Info){//添加一条数据
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\addOneInfo.py '+ title+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function modifyInfo(title,num,Info){//#修改某人数据（通过工号）
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\modifyInfo.py '+ title+' '+num+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function modifyAdmin(title,adminName){//修改某项目的管理员
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\modifyAdmin.py '+ title+' '+adminName+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
 
 function isCycle(sources, targets) { //判断DAG是否成环,成环是false
     for(let i=0;i<sources.length;i++){
@@ -83,7 +134,9 @@ module.exports = {
             }
             return
         }
-        projectId = await adminDao.startNewProject(nums, projectName,adminAccount)
+        let projectId = await adminDao.startNewProject(nums, projectName,adminAccount)
+        let adminName = await adminDao.getAdminName(adminAccount)
+        createProjectDoc(projectName,"ABC",adminName)
         ctx.body = {
             code: '001',
             projectId,
@@ -126,6 +179,9 @@ module.exports = {
             return
         }
         await adminDao.createProject(projectName, sorts, accounts, sources, targets,adminAccount);
+
+        let adminName = await adminDao.getAdminName(adminAccount)
+        createProjectDoc(projectName,"ABC",adminName)
         ctx.body = {
             code: '001',
             msg: '创建成功'

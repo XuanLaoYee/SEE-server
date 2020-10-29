@@ -4,6 +4,58 @@ const userDao = require('../models/Dao/userDao')
 const ItemDao = require('../models/Dao/ItemsDao')
 const superAdminDao = require('../models/Dao/superAdminDao')
 
+function createProjectDoc(title,order,admin){//建立项目和次序和管理员
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\createProjectDoc.py '+ title+' '+order+' '+admin+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function addInfo(title,Info){//添加一大批数据
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\addInfo.py '+ title+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+
+function addOneInfo(title,Info){//添加一条数据
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\addOneInfo.py '+ title+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function modifyInfo(title,num,Info){//#修改某人数据（通过工号）
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\modifyInfo.py '+ title+' '+num+' '+Info+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+function modifyAdmin(title,adminName){//修改某项目的管理员
+    const cp= require('child_process')
+    cp.exec('python C:\\Users\\11158\\Desktop\\server\\app\\static\\modifyAdmin.py '+ title+' '+adminName+' ', (err, stdout, stderr) =>
+    {
+        if (err)
+            console.log('stderr', err);
+        if (stdout)
+            console.log('stdout', stdout);
+    })
+}
+
 module.exports = {
     Login:async ctx => {
         let {account,password} = ctx.request.body;
@@ -71,7 +123,13 @@ module.exports = {
             }
             return
         }
-        //TODO  写到word里
+
+        const theSort = await userDao.checkMySort(account)
+        let date = new Date();
+        const theName = await userDao.checkMyName(account)
+        const wantToWriteItem = "('"+theSort+"','"+id.toString()+"','"+theName[0].userName+"','"+account+"','"+date.toLocaleDateString()+"')";
+        const projectName = await staffDao.checkTheProjectNameById(id)
+        addInfo(projectName,wantToWriteItem)
         await staffDao.finishTheTask(id)
         ctx.body = {
             code:'001',

@@ -124,7 +124,7 @@ module.exports = {
         return await db.query(sql,account)
     },
     checkIsMyAndCanDo: async (id,account) =>{
-        const sql = 'select * from perform where id = ? and account = ? and transfer = 0';
+        const sql = 'select * from perform where id = ? and(( account = ? and transfer = 0) or (executor = ? and transfer = 1))';
         const tasks = await db.query(sql,[id,account])
         if(tasks.length === 0){
             return null
@@ -181,5 +181,11 @@ module.exports = {
         }
         return false;
     },
-
+    checkTheProjectNameById:async (id)=>{
+        const sql = 'select * from task where id = ?'
+        const tasks = await db.query(sql,id)
+        const sql1 = 'select * from projectname where project = ?'
+        const theProject = await db.query(sql1,tasks[0].project);
+        return theProject[0].name;
+    }
 }

@@ -301,5 +301,10 @@ module.exports = {
     findTheProjectDone:async (project)=>{
         const sql = 'select * from participate where project = ?';
         return await db.query(sql,project)
+    },
+    getAdminName:async (account) =>{
+        const sql = 'select * from admin where account = ?'
+        const theAdmin =  await db.query(sql,account)
+        return theAdmin[0].userName;
     }
 }
