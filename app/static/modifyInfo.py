@@ -10,7 +10,7 @@ except Exception as ex:
 document = Document(title+'.docx')
 tables=document.tables
 table=tables[0]
-rows = len(table.rows) 
+rows = len(table.rows)
 #查找工号为num的人
 for i in range(rows-1):
     row=table.rows[i+1]
@@ -36,11 +36,11 @@ def sortInfo(title):
         tmp=[]
         for j in range(cols):
             tmp.append(row.cells[j].text)
-        tmptable.append(tmp)     
+        tmptable.append(tmp)
     #得到所有的表格数据
     #TODO scan
     tmptable2=[]
-    
+
     for i in range(len(order)):
         for j in range(rows-1):
             if(order[i]==tmptable[j][0]):
@@ -50,5 +50,5 @@ def sortInfo(title):
         row=table.rows[i+1]
         for j in range(cols):
             row.cells[j].text=tmptable2[i][j]
-    document.save(title+'.docx') 
-sortInfo(title)
+    document.save(title+'.docx')
+#sortInfo(title)

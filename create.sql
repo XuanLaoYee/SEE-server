@@ -31,10 +31,7 @@ create table perform(
     id int not null ,
     executor char(40) not null ,
     deadline long ,
-    transfer int not null,
-    constraint FK_account foreign key (account) references staff (account),
-    constraint FK_id foreign key (id) references task(id),
-    constraint FK_executor foreign key (account) references staff(account)
+    transfer int not null
 );
 
 create table participate(
@@ -67,14 +64,14 @@ create table charge(
 );
 
 
-insert into staff values ('1','1','A','大娃');
-insert into staff values ('2','2','A','二娃');
-insert into staff values ('3','3','B','三娃');
-insert into staff values ('4','4','B','四娃');
-insert into staff values ('5','5','C','五娃');
-insert into staff values ('6','6','C','六娃');
+insert into staff values ('1','111111','A','大娃');
+insert into staff values ('2','111111','A','二娃');
+insert into staff values ('3','111111','B','三娃');
+insert into staff values ('4','111111','B','四娃');
+insert into staff values ('5','111111','C','五娃');
+insert into staff values ('6','111111','C','六娃');
 
-insert into admin values ('admin','admin','老逼登');
+insert into admin values ('admin','111111','老逼登');
 insert into admin values ('sxc','111111','孙狗');
 
 insert into superAdmin values ('super','111111','波多野结衣');
@@ -236,5 +233,6 @@ insert into sequence values(39,null);
 
 insert into charge values ('admin',1);
 insert into charge values ('admin',3);
+insert into charge values ('sxc',2);
 
 

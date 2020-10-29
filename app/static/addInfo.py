@@ -14,10 +14,10 @@ for table in tables:
         cells = table.add_row().cells
         cells[0].text = str(item[0])
         cells[1].text = str(item[1])
-        cells[2].text = str(item[2]) 
-        cells[3].text = str(item[3]) 
+        cells[2].text = str(item[2])
+        cells[3].text = str(item[3])
         cells[4].text = str(item[4])
-       
+
 document.save(title+'.docx')
 
 def sortInfo(title):
@@ -36,11 +36,11 @@ def sortInfo(title):
         tmp=[]
         for j in range(cols):
             tmp.append(row.cells[j].text)
-        tmptable.append(tmp)     
+        tmptable.append(tmp)
     #得到所有的表格数据
     #TODO scan
     tmptable2=[]
-    
+
     for i in range(len(order)):
         for j in range(rows-1):
             if(order[i]==tmptable[j][0]):
@@ -50,5 +50,5 @@ def sortInfo(title):
         row=table.rows[i+1]
         for j in range(cols):
             row.cells[j].text=tmptable2[i][j]
-    document.save(title+'.docx')  
-sortInfo(title)
+    document.save(title+'.docx')
+#sortInfo(title)
